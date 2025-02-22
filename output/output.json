@@ -1,0 +1,139 @@
+{
+    "personal": {
+        "name": "Jonathan Oppenheimer",
+        "email": "joppenhe@purdue.edu",
+        "phone": null,
+        "links": {
+            "github": "github.com/JonathanOppenheimer",
+            "linkedin": "linkedin.com/in/jonathan-oppenheimer",
+            "website": null
+        }
+    },
+    "education": [
+        {
+            "institution": "Purdue University",
+            "degree": "BS in Computer Science, Minor in Mathematics and Political Science",
+            "startDate": "2021-08-01",
+            "endDate": "2025-05-01",
+            "gpa": "3.90/4.00"
+        }
+    ],
+    "experience": [
+        {
+            "company": "Cisco Systems, Inc",
+            "role": "Distributed Systems Engineering Intern",
+            "startDate": "2024-05-01",
+            "endDate": "2024-08-01",
+            "highlights": [
+                "Developed a Webex bot for OS builds",
+                "Implemented a RAG system with Llama 3.1",
+                "Consolidated bug tracking in Elasticsearch"
+            ]
+        },
+        {
+            "company": "NASA Jet Propulsion Laboratory",
+            "role": "Software Engineer Intern (Caltech JPL-YIP)",
+            "startDate": "2023-06-01",
+            "endDate": "2024-05-01",
+            "highlights": [
+                "Prototyped cloud-based ETL pipeline for DSN",
+                "Shifted scripts to AWS for performance",
+                "Presented architecture to senior engineers"
+            ]
+        },
+        {
+            "company": "Space Ground System Solutions",
+            "role": "Software Engineer Intern",
+            "startDate": "2022-06-01",
+            "endDate": "2022-08-01",
+            "highlights": [
+                "Engineered client/server software for remote antenna",
+                "Achieved sub 100ms response times",
+                "Developed custom driver for antenna control"
+            ]
+        }
+    ],
+    "projects": [
+        {
+            "title": "Hack the Future",
+            "description": "Technical Director",
+            "url": null,
+            "technologies": null
+        },
+        {
+            "title": "Latino Center for Wellness and Education",
+            "description": "Revamped the website in React for better accessibility.",
+            "url": null,
+            "technologies": [
+                "React"
+            ]
+        },
+        {
+            "title": "Leadership Lafayette",
+            "description": "Co-developed a testimonial submission tool for a nonprofit.",
+            "url": null,
+            "technologies": null
+        },
+        {
+            "title": "jsh",
+            "description": "Developed a robust Unix shell as a bash replacement.",
+            "url": null,
+            "technologies": [
+                "C/C++",
+                "Lex",
+                "Yacc"
+            ]
+        },
+        {
+            "title": "Mustang Mug",
+            "description": "Co-led development of an online ordering web application.",
+            "url": null,
+            "technologies": [
+                "MySchoolBucks API",
+                "Firebase"
+            ]
+        }
+    ],
+    "skills": [
+        "Python",
+        "C/C++",
+        "TypeScript/JavaScript",
+        "Java",
+        "PL/SQL",
+        "bash",
+        "HTML/CSS",
+        "Vega",
+        "AWS (Glue, Step, Lambda, S3, CloudFormation etc.)",
+        "React",
+        "Svelte",
+        "Node.js",
+        "Flask",
+        "Docker",
+        "Oracle Database",
+        "Elasticsearch",
+        "Firebase",
+        "MongoDB",
+        "Kibana",
+        "git",
+        "GitHub Actions CI/CD",
+        "Unix"
+    ],
+    "certifications": null,
+    "awards": [
+        {
+            "title": "Kunze Scholarship",
+            "awarder": "Purdue Computer Science Department",
+            "date": "2022-01-01"
+        },
+        {
+            "title": "Boeing Scholarship",
+            "awarder": "Purdue Computer Science Department",
+            "date": "2023-01-01"
+        },
+        {
+            "title": "Eagle Scout",
+            "awarder": null,
+            "date": null
+        }
+    ]
+}
