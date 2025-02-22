@@ -116,7 +116,7 @@ def repo_to_context(path: Path, char_limit=350000):
         removed = code_files.pop()
         total_bytes -= removed.n_bytes
         pruned_files.append(removed)
-    print(f"pruned {len(pruned_files)} files", file=sys.stderr)
+    # print(f"pruned {len(pruned_files)} files", file=sys.stderr)
 
     # for f in pruned_files:
     #     print(f, file=sys.stderr)
@@ -134,13 +134,13 @@ def repo_to_context(path: Path, char_limit=350000):
         out += f.path.read_text() + "\n"
         out += f"</file> <!-- {rel_path} -->\n"
 
-    print(f"total size: {len(out)}", file=sys.stderr)
+    # print(f"total size: {len(out)}", file=sys.stderr)
 
     return out
 
 
 class RepoInstance:
-    def __init__(self, git_urL: str):
+    def __init__(self, git_url: str):
         self.git_url = git_url
 
         # make temporary directory
@@ -159,22 +159,9 @@ class RepoInstance:
     def close(self):
         self.tmp_dir.cleanup()
 
-
-if __name__ == "__main__":
-    git_url = sys.argv[1]
-
-    import time
-    start = time.time()
-    print(f"Cloning {git_url}", file=sys.stderr)
+def repo_url_to_context(git_url: str):
     repo = RepoInstance(git_url)
     repo.open()
-    clone_time = time.time() - start
-    print(f"Took {clone_time:.2f}s to clone repo", file=sys.stderr)
-
-    start = time.time()
     out = repo_to_context(repo.path)
     repo.close()
-    proc_time = time.time() - start
-    print(f"Took {proc_time:.2f}s to process repo", file=sys.stderr)
-
-    print(out)
+    return out
