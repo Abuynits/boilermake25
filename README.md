@@ -30,7 +30,7 @@ pip install -r requirements.txt
 ### 3. Set Up Frontend
 ```bash
 # Navigate to frontend directory
-cd input-frontend
+cd frontend
 
 # Install dependencies
 npm install
@@ -58,7 +58,7 @@ The backend will run on `http://localhost:8000`
 ### 2. Start the Frontend Development Server
 In another terminal:
 ```bash
-cd input-frontend
+cd frontend
 npm run dev
 ```
 The frontend will run on `http://localhost:3000`
