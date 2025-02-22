@@ -1,139 +1,66 @@
 {
-    "personal": {
-        "name": "Jonathan Oppenheimer",
-        "email": "joppenhe@purdue.edu",
-        "phone": null,
-        "links": {
-            "github": "github.com/JonathanOppenheimer",
-            "linkedin": "linkedin.com/in/jonathan-oppenheimer",
-            "website": null
-        }
+    "company": {
+        "name": "Scale AI",
+        "website": null,
+        "location": null
     },
-    "education": [
-        {
-            "institution": "Purdue University",
-            "degree": "BS in Computer Science, Minor in Mathematics and Political Science",
-            "startDate": "2021-08-01",
-            "endDate": "2025-05-01",
-            "gpa": "3.90/4.00"
-        }
-    ],
-    "experience": [
-        {
-            "company": "Cisco Systems, Inc",
-            "role": "Distributed Systems Engineering Intern",
-            "startDate": "2024-05-01",
-            "endDate": "2024-08-01",
-            "highlights": [
-                "Developed a Webex bot for OS builds",
-                "Implemented a RAG system with Llama 3.1",
-                "Consolidated bug tracking in Elasticsearch"
-            ]
-        },
-        {
-            "company": "NASA Jet Propulsion Laboratory",
-            "role": "Software Engineer Intern (Caltech JPL-YIP)",
-            "startDate": "2023-06-01",
-            "endDate": "2024-05-01",
-            "highlights": [
-                "Prototyped cloud-based ETL pipeline for DSN",
-                "Shifted scripts to AWS for performance",
-                "Presented architecture to senior engineers"
-            ]
-        },
-        {
-            "company": "Space Ground System Solutions",
-            "role": "Software Engineer Intern",
-            "startDate": "2022-06-01",
-            "endDate": "2022-08-01",
-            "highlights": [
-                "Engineered client/server software for remote antenna",
-                "Achieved sub 100ms response times",
-                "Developed custom driver for antenna control"
-            ]
-        }
-    ],
-    "projects": [
-        {
-            "title": "Hack the Future",
-            "description": "Technical Director",
-            "url": null,
-            "technologies": null
-        },
-        {
-            "title": "Latino Center for Wellness and Education",
-            "description": "Revamped the website in React for better accessibility.",
-            "url": null,
-            "technologies": [
-                "React"
-            ]
-        },
-        {
-            "title": "Leadership Lafayette",
-            "description": "Co-developed a testimonial submission tool for a nonprofit.",
-            "url": null,
-            "technologies": null
-        },
-        {
-            "title": "jsh",
-            "description": "Developed a robust Unix shell as a bash replacement.",
-            "url": null,
-            "technologies": [
-                "C/C++",
-                "Lex",
-                "Yacc"
-            ]
-        },
-        {
-            "title": "Mustang Mug",
-            "description": "Co-led development of an online ordering web application.",
-            "url": null,
-            "technologies": [
-                "MySchoolBucks API",
-                "Firebase"
-            ]
-        }
-    ],
-    "skills": [
-        "Python",
-        "C/C++",
-        "TypeScript/JavaScript",
-        "Java",
-        "PL/SQL",
-        "bash",
-        "HTML/CSS",
-        "Vega",
-        "AWS (Glue, Step, Lambda, S3, CloudFormation etc.)",
-        "React",
-        "Svelte",
-        "Node.js",
-        "Flask",
-        "Docker",
-        "Oracle Database",
-        "Elasticsearch",
-        "Firebase",
-        "MongoDB",
-        "Kibana",
-        "git",
-        "GitHub Actions CI/CD",
-        "Unix"
-    ],
-    "certifications": null,
-    "awards": [
-        {
-            "title": "Kunze Scholarship",
-            "awarder": "Purdue Computer Science Department",
-            "date": "2022-01-01"
-        },
-        {
-            "title": "Boeing Scholarship",
-            "awarder": "Purdue Computer Science Department",
-            "date": "2023-01-01"
-        },
-        {
-            "title": "Eagle Scout",
-            "awarder": null,
-            "date": null
-        }
-    ]
+    "job": {
+        "title": "Mission Software Engineer",
+        "description": "Scale AI is seeking a highly skilled and motivated Mission Software Engineer to join our dynamic Federal Engineering team. As a part of this team, you will play a critical role in supporting Scale\u2019s government customers by scoping and developing onsite solutions. Our scalable, high-performance platform is the foundation for these customer solutions, and your expertise will be instrumental in designing and implementing systems that can handle interactions with existing customer systems to help our products integrate into existing customer workflows.",
+        "responsibilities": [
+            "Work directly with customers to understand their problems and translate those into features in Scale\u2019s platform.",
+            "Be open to >50% travel or relocation to a key customer geographic location.",
+            "Collaborate with cross-functional teams to define and execute the vision for backend solutions, ensuring they meet the unique needs of government agencies operating in secure environments.",
+            "Implement end-to-end data integrations, syncing customer\u2019s data to Scale\u2019s platform and back.",
+            "Deploy and maintain Scale software at customer sites.",
+            "Develop customer requested features and work closely with them to ensure that they win customer love.",
+            "Build robust and reliable backend systems that can serve as standalone products, empowering customers to accelerate their own AI ambitions.",
+            "Participate actively in customer engagements, working closely with stakeholders to understand requirements and deliver innovative solutions."
+        ],
+        "requirements": [
+            "Track record of success as a hybrid customer facing engineer, forward deployed software engineer, and ability to quickly adapt to different roles.",
+            "Prior experience developing with Python and JavaScript, or other modern software languages. Familiarity with Node and React is a plus.",
+            "Familiarity with cloud platforms (e.g., AWS, Azure, GCP) and experience in developing and deploying applications in a cloud-native environment.",
+            "Understanding of containerization (e.g., Docker) and container orchestration (e.g., Kubernetes) is a plus.",
+            "Understanding of shell scripting, operating systems, etc.",
+            "Understanding of networking technologies, configuration (ports, protocols, etc).",
+            "Knowledge of ETL (Extract, Transform, Load) processes and experience in building data pipelines to integrate and process diverse data sources.",
+            "Understanding of data modeling, data warehousing, and data governance principles.",
+            "Strong analytical and problem-solving skills to understand complex challenges and devise effective solutions."
+        ],
+        "skills": [
+            "Python",
+            "JavaScript",
+            "Node",
+            "React",
+            "AWS",
+            "Azure",
+            "GCP",
+            "Docker",
+            "Kubernetes",
+            "Linux",
+            "Networking",
+            "ETL",
+            "Data Modeling",
+            "Data Warehousing",
+            "Data Governance"
+        ],
+        "employmentType": "Full-Time",
+        "experienceLevel": null,
+        "salaryRange": "$165,600\u2014$263,304 USD (Washington DC, Texas, Colorado); $184,000\u2014$292,560 USD (San Francisco, New York, Seattle); $138,000\u2014$219,420 USD (St. Louis)",
+        "benefits": [
+            "Comprehensive health, dental and vision coverage",
+            "Retirement benefits",
+            "Learning and development stipend",
+            "Generous PTO",
+            "Commuter stipend (may be eligible)"
+        ],
+        "postingDate": null,
+        "closingDate": null
+    },
+    "application": {
+        "howToApply": null,
+        "applicationURL": null,
+        "contactEmail": "accommodations@scale.com"
+    }
 }
