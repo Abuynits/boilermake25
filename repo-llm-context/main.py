@@ -35,6 +35,7 @@ class FileInfo:
     @property
     def heuristic(self):
         return self.entropy
+        # return self.complexity
 
     def with_entropy(self):
         return FileInfo(
@@ -73,7 +74,8 @@ def transform_scc(input_data):
     return result
 
 
-def repo_to_context(path: Path, char_limit=300000):
+def repo_to_context(path: Path, char_limit=350000):
+    char_limit *= 0.94 # account for xml tags overhead
     # cmd = shlex.split("scc --by-file --format json")
     # cmd.append(str(path))
     cmd = [
@@ -95,26 +97,31 @@ def repo_to_context(path: Path, char_limit=300000):
     out = out.replace('"/repo', f'"{path}')
     if scc.returncode != 0:
         raise Exception("scc failed")
+    
+    non_code_languages = ["Markdown", "YAML", "TOML", "JSON", "XML", "Dockerfile"]
 
     code_files = transform_scc(json.loads(out))
     code_files = filter(lambda x: x.human, code_files)
+    code_files = filter(lambda x: x.language not in non_code_languages, code_files)
+    code_files = filter(lambda x: "/tests/" not in str(x.path), code_files)
+    original_files = code_files
     code_files = filter(lambda x: x.complexity > 0, code_files)
-    code_files = filter(lambda x: "test" not in str(x.path), code_files)
     with ThreadPoolExecutor() as executor:
         code_files = list(executor.map(lambda x: x.with_entropy(), code_files))
     code_files = sorted(code_files, key=lambda x: x.heuristic, reverse=True)
 
-    pruned_files = []
+    pruned_files = [x for x in original_files if x not in code_files]
     total_bytes = sum(x.n_bytes for x in code_files)
     while total_bytes > char_limit:
         removed = code_files.pop()
         total_bytes -= removed.n_bytes
         pruned_files.append(removed)
-
-    pruned_files = sorted(pruned_files, key=lambda x: x.complexity)
+    print(f"pruned {len(pruned_files)} files", file=sys.stderr)
 
     # for f in pruned_files:
     #     print(f, file=sys.stderr)
+
+    pruned_files = sorted(pruned_files, key=lambda x: x.complexity)
 
     # print(list(map(lambda x: x.heuristic, code_files)), file=sys.stderr)
     # print(list(map(lambda x: x.heuristic, pruned_files)), file=sys.stderr)
@@ -126,6 +133,8 @@ def repo_to_context(path: Path, char_limit=300000):
         out += f'<file name="{rel_path}">\n'
         out += f.path.read_text() + "\n"
         out += f"</file> <!-- {rel_path} -->\n"
+
+    print(f"total size: {len(out)}", file=sys.stderr)
 
     return out
 
