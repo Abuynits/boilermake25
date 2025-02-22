@@ -54,7 +54,6 @@ posting_prompt = PromptTemplate(
 )
 ################################################################ 
 
-
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
 
 # Build the chain using the pipe syntax.

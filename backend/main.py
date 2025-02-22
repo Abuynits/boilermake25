@@ -82,7 +82,8 @@ async def analyze_resume(
             "saved_files": {
                 "resume": resume_file,
                 "job": job_file
-            }
+            },
+            "hash": hash
         }
         
     except Exception as e:
