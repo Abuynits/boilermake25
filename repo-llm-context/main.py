@@ -29,13 +29,11 @@ class FileInfo:
     complexity: int
     entropy: float
     language: str
-    binary: bool
-    minified: bool
-    generated: bool
-
+    human: bool
+    
     @property
-    def human(self):
-        return not (self.binary or self.minified or self.generated)
+    def heuristic(self):
+        return self.entropy
     
     def with_entropy(self):
         return FileInfo(
@@ -44,9 +42,7 @@ class FileInfo:
             complexity=self.complexity,
             entropy=file_pigz_entropy(self.path),
             language=self.language,
-            binary=self.binary,
-            minified=self.minified,
-            generated=self.generated,
+            human=self.human,
         )
 
 
@@ -58,16 +54,18 @@ def transform_scc(input_data):
         # Iterate through each file in the category
         for file_info in language_category.get("Files", []):
             # Create a FileInfo object
+            binary=file_info.get("Binary", False)
+            minified=file_info.get("Minified", False)
+            generated=file_info.get("Generated", False)
+
             loc = Path(file_info.get("Location", ""))
             file_entry = FileInfo(
                 path=loc,
                 n_bytes=file_info.get("Bytes", 0),
                 complexity=file_info.get("Complexity", 0),
                 language=file_info.get("Language", ""),
-                binary=file_info.get("Binary", False),
-                minified=file_info.get("Minified", False),
-                generated=file_info.get("Generated", False),
                 entropy=None,
+                human=not (binary or minified or generated),
             )
             result.append(file_entry)
 
@@ -102,7 +100,7 @@ def repo_to_context(path: Path, char_limit=350000):
     code_files = filter(lambda x: x.complexity > 0, code_files)
     code_files = filter(lambda x: "test" not in str(x.path), code_files)
     code_files = map(lambda x: x.with_entropy(), code_files)
-    code_files = sorted(code_files, key=lambda x: x.entropy, reverse=True)
+    code_files = sorted(code_files, key=lambda x: x.heuristic, reverse=True)
 
     pruned_files = []
     total_bytes = sum(x.n_bytes for x in code_files)
@@ -111,8 +109,13 @@ def repo_to_context(path: Path, char_limit=350000):
         total_bytes -= removed.n_bytes
         pruned_files.append(removed)
 
+    pruned_files = sorted(pruned_files, key=lambda x: x.complexity)
     for f in pruned_files:
         print(f, file=sys.stderr)
+
+    # print(list(map(lambda x: x.heuristic, code_files)), file=sys.stderr)
+    # print(list(map(lambda x: x.heuristic, pruned_files)), file=sys.stderr)
+
 
     out = ""
     code_files = sorted(code_files, key=lambda x: str(x.path))
