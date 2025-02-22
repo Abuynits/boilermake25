@@ -73,6 +73,30 @@ def transform_scc(input_data):
 
     return result
 
+def repo_to_commits(path: Path, gh_username: str, char_limit=350000):
+    char_limit *= 0.94 # account for xml tags overhead
+    # cmd = shlex.split("scc --by-file --format json")
+    # cmd.append(str(path))
+    import os
+    cwd = os.getcwd()
+    os.chdir(path)
+    cmd = [
+        "git",
+        "log",
+        "-p",
+        f"--author={gh_username}",
+        "--diff-filter=ACDMRTUXB"
+    ]
+    # `git log -p --author="<author email>" --diff-filter=ACDMRTUXB`
+    s_out = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    out, _ = s_out.communicate()
+    out = out.decode("utf-8")
+    out = out.replace('"/repo', f'"{path}')
+    os.chdir(cwd)
+    if s_out.returncode != 0:
+        raise Exception("scc failed")
+    return out
+
 
 def repo_to_context(path: Path, char_limit=350000):
     char_limit *= 0.94 # account for xml tags overhead
@@ -152,6 +176,7 @@ class RepoInstance:
         cmd.append(self.git_url)
         cmd.append(str(self.path))
         git = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # git = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         git.communicate()
         if git.returncode != 0:
             raise Exception("git failed")
@@ -163,5 +188,13 @@ def repo_url_to_context(git_url: str):
     repo = RepoInstance(git_url)
     repo.open()
     out = repo_to_context(repo.path)
+    repo.close()
+    return out
+
+
+def repo_url_to_commits(git_url: str, gh_username: str):
+    repo = RepoInstance(git_url)
+    repo.open()
+    out = repo_to_commits(repo.path, gh_username)
     repo.close()
     return out
