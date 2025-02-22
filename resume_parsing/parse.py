@@ -61,16 +61,6 @@ llm = ChatOpenAI(temperature=0, model="gpt-4o-mini")
 resume_chain = resume_prompt | llm | resume_parser
 posting_chain = posting_prompt | llm | posting_parser
 
-resume_path = "./input/resume.pdf" 
-posting_path = "./input/job_posting.txt"
-
-resume_text = load_input(resume_path, is_txt=False)
-posting_text = load_input(posting_path, is_txt=True)
-
-# Invoke the chain with the resume text and print the structured JSON output.
-# resume_result = resume_chain.invoke({"resume_text": resume_text})
-posting_result = posting_chain.invoke({"posting_text": posting_text})
-
-# Save the JSON output to a file
-with open("output/output.json", "w") as f:
-    json.dump(posting_result, f, indent=4)
+# Initialize the chains for use by the API
+resume_chain = resume_prompt | llm | resume_parser
+posting_chain = posting_prompt | llm | posting_parser
