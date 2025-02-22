@@ -20,7 +20,7 @@ if not os.path.exists(resume_file):
 with open(resume_file) as f:
       data = json.load(f)
 # gh_username = data['contact']['github'].split('/')[-1]
-gh_username = 'SpideR1sh1'
+gh_username = 'abuynits'
 
 # user_bio_info = get_user_bio(gh_username)
 # if not user_bio_info:
