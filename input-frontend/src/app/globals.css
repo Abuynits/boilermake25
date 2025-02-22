@@ -17,5 +17,14 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom form styles */
+input[type='file']::file-selector-button {
+  @apply mr-4 py-2 px-4 rounded-md border-0 text-sm font-semibold
+    bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer;
+}
+
+textarea:focus {
+  @apply border-blue-500 ring-blue-500;
 }
