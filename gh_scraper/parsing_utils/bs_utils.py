@@ -36,3 +36,10 @@ def extract_repo_from_gh_org(org):
 
     repos = [repo.text.strip() for repo in repos]
     return repos
+def extract_desc_from_repo(user, repo):
+    # https://github.com/jinensetpal/boilerbot
+    url = f"https://github.com/{user}/{repo}"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    desc = soup.find_all("p", class_="f4 my-3")
+    return None if len(desc) == 0 else desc[0].text.strip()
