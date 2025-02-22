@@ -5,13 +5,14 @@ import tempfile
 import subprocess
 from pathlib import Path
 from dataclasses import dataclass
+from concurrent.futures import ThreadPoolExecutor
 
 
 def file_pigz_entropy(path: Path):
     orig_size = path.stat().st_size
     if orig_size == 0:
         return 0
-    
+
     cmd = ["pigz", "-c", str(path)]
     pigz = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out, _ = pigz.communicate()
@@ -30,11 +31,11 @@ class FileInfo:
     entropy: float
     language: str
     human: bool
-    
+
     @property
     def heuristic(self):
         return self.entropy
-    
+
     def with_entropy(self):
         return FileInfo(
             path=self.path,
@@ -54,9 +55,9 @@ def transform_scc(input_data):
         # Iterate through each file in the category
         for file_info in language_category.get("Files", []):
             # Create a FileInfo object
-            binary=file_info.get("Binary", False)
-            minified=file_info.get("Minified", False)
-            generated=file_info.get("Generated", False)
+            binary = file_info.get("Binary", False)
+            minified = file_info.get("Minified", False)
+            generated = file_info.get("Generated", False)
 
             loc = Path(file_info.get("Location", ""))
             file_entry = FileInfo(
@@ -72,7 +73,7 @@ def transform_scc(input_data):
     return result
 
 
-def repo_to_context(path: Path, char_limit=350000):
+def repo_to_context(path: Path, char_limit=300000):
     # cmd = shlex.split("scc --by-file --format json")
     # cmd.append(str(path))
     cmd = [
@@ -99,7 +100,8 @@ def repo_to_context(path: Path, char_limit=350000):
     code_files = filter(lambda x: x.human, code_files)
     code_files = filter(lambda x: x.complexity > 0, code_files)
     code_files = filter(lambda x: "test" not in str(x.path), code_files)
-    code_files = map(lambda x: x.with_entropy(), code_files)
+    with ThreadPoolExecutor() as executor:
+        code_files = list(executor.map(lambda x: x.with_entropy(), code_files))
     code_files = sorted(code_files, key=lambda x: x.heuristic, reverse=True)
 
     pruned_files = []
@@ -110,12 +112,12 @@ def repo_to_context(path: Path, char_limit=350000):
         pruned_files.append(removed)
 
     pruned_files = sorted(pruned_files, key=lambda x: x.complexity)
-    for f in pruned_files:
-        print(f, file=sys.stderr)
+
+    # for f in pruned_files:
+    #     print(f, file=sys.stderr)
 
     # print(list(map(lambda x: x.heuristic, code_files)), file=sys.stderr)
     # print(list(map(lambda x: x.heuristic, pruned_files)), file=sys.stderr)
-
 
     out = ""
     code_files = sorted(code_files, key=lambda x: str(x.path))
@@ -140,7 +142,7 @@ class RepoInstance:
         cmd = shlex.split("git clone --depth 1")
         cmd.append(self.git_url)
         cmd.append(str(self.path))
-        git = subprocess.Popen(cmd)
+        git = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         git.communicate()
         if git.returncode != 0:
             raise Exception("git failed")
@@ -152,9 +154,18 @@ class RepoInstance:
 if __name__ == "__main__":
     git_url = sys.argv[1]
 
+    import time
+    start = time.time()
+    print(f"Cloning {git_url}", file=sys.stderr)
     repo = RepoInstance(git_url)
     repo.open()
+    clone_time = time.time() - start
+    print(f"Took {clone_time:.2f}s to clone repo", file=sys.stderr)
+
+    start = time.time()
     out = repo_to_context(repo.path)
     repo.close()
+    proc_time = time.time() - start
+    print(f"Took {proc_time:.2f}s to process repo", file=sys.stderr)
 
     print(out)
