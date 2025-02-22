@@ -1,6 +1,8 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
 
+################################ CSResume ################################
+
 class Links(BaseModel):
     github: Optional[str] = Field(None, description="GitHub profile URL")
     linkedin: Optional[str] = Field(None, description="LinkedIn profile URL")
@@ -50,3 +52,34 @@ class CSResume(BaseModel):
     skills: List[str] = Field(..., description="List of skills")
     certifications: Optional[List[Certification]] = Field(None, description="List of certifications")
     awards: Optional[List[Award]] = Field(None, description="List of awards")
+
+
+################################ CSJobPosting ################################
+
+class Company(BaseModel):
+    name: str = Field(..., description="Company name")
+    website: Optional[str] = Field(None, description="Company website URL")
+    location: Optional[str] = Field(None, description="Company location or headquarters")
+
+class JobDescription(BaseModel):
+    title: str = Field(..., description="Job title")
+    description: str = Field(..., description="Detailed job description")
+    responsibilities: Optional[List[str]] = Field(None, description="List of key responsibilities for the role")
+    requirements: Optional[List[str]] = Field(None, description="List of required qualifications and skills")
+    skills: Optional[List[str]] = Field(None, description="List of technical skills or proficiencies required")
+    employmentType: Optional[str] = Field(None, description="Employment type (e.g., Full-Time, Part-Time, Contract)")
+    experienceLevel: Optional[str] = Field(None, description="Experience level required (e.g., Entry-Level, Mid-Level, Senior)")
+    salaryRange: Optional[str] = Field(None, description="Salary range offered (e.g., '$70k-$90k')")
+    benefits: Optional[List[str]] = Field(None, description="List of benefits provided (e.g., Health Insurance, 401k)")
+    postingDate: Optional[str] = Field(None, description="Job posting date in YYYY-MM-DD format")
+    closingDate: Optional[str] = Field(None, description="Application closing date in YYYY-MM-DD format")
+
+class ApplicationDetails(BaseModel):
+    howToApply: Optional[str] = Field(None, description="Instructions for applying to the job")
+    applicationURL: Optional[str] = Field(None, description="URL where candidates can submit their applications")
+    contactEmail: Optional[str] = Field(None, description="Contact email for job-related inquiries")
+
+class CSJobPosting(BaseModel):
+    company: Company = Field(..., description="Company information")
+    job: JobDescription = Field(..., description="Job details")
+    application: Optional[ApplicationDetails] = Field(None, description="Application instructions and contact details")

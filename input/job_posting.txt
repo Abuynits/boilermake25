@@ -1,0 +1,52 @@
+About the job
+Scale AI is seeking a highly skilled and motivated Mission Software Engineer to join our dynamic Federal Engineering team. As a part of this team, you will play a critical role in supporting Scale’s government customers by scoping and developing onsite solutions. Our scalable, high-performance platform is the foundation for these customer solutions, and your expertise will be instrumental in designing and implementing systems that can handle interactions with existing customer systems to help our products integrate into existing customer workflows.
+
+You will:
+
+Work directly with customers to understand their problems and translate those into features in Scale’s platform.
+Be open to >50% travel or relocation to a key customer geographic location.
+Collaborate with cross-functional teams to define and execute the vision for backend solutions, ensuring they meet the unique needs of government agencies operating in secure environments.
+Implement end-to-end data integrations, syncing customer’s data to Scale’s platform and back
+Deploy and maintain Scale software at customer sites
+Develop customer requested features and work closely with them to ensure that they win customer love.
+Build robust and reliable backend systems that can serve as standalone products, empowering customers to accelerate their own AI ambitions.
+Participate actively in customer engagements, working closely with stakeholders to understand requirements and deliver innovative solutions.
+This role will require an active TS/SCI security clearance or the ability to obtain a security clearance.
+
+Ideally you have:
+
+Track record of success as a hybrid customer facing engineer, forward deployed software engineer, and ability to quickly adapt to different roles.
+Prior experience developing with Python and JavaScript, or other modern software languages. Familiarity with Node and React is a plus.
+Cloud-Native Technologies: Familiarity with cloud platforms (e.g., AWS, Azure, GCP) and experience in developing and deploying applications in a cloud-native environment. Understanding of containerization (e.g., Docker) and container orchestration (e.g., Kubernetes) is a plus
+Linux experience: Understanding of shell scripting, operating systems, etc
+Networking experience: Understanding of networking technologies, configuration (ports, protocols, etc) 
+Data Engineering: Knowledge of ETL (Extract, Transform, Load) processes and experience in building data pipelines to integrate and process diverse data sources. Understanding of data modeling, data warehousing, and data governance principles
+Problem Solving: Strong analytical and problem-solving skills to understand complex challenges and devise effective solutions. Ability to think critically, identify root causes, and propose innovative approaches to overcome technical obstacles
+
+Compensation packages at Scale for eligible roles include base salary, equity, and benefits. The range displayed on each job posting reflects the minimum and maximum target for new hire salaries for the position, determined by work location and additional factors, including job-related skills, experience, interview performance, and relevant education or training. Scale employees in eligible roles are also granted equity based compensation, subject to Board of Director approval. Your recruiter can share more about the specific salary range for your preferred location during the hiring process, and confirm whether the hired role will be eligible for equity grant. You’ll also receive benefits including, but not limited to: Comprehensive health, dental and vision coverage, retirement benefits, a learning and development stipend, and generous PTO. Additionally, this role may be eligible for additional benefits such as a commuter stipend.
+
+Please reference the job posting's subtitle for where this position will be located. For pay transparency purposes, the base salary range for this full-time position in the locations of San Francisco, New York, Seattle is:
+
+$184,000—$292,560 USD
+
+The base salary range for this full-time position in the locations of Washington DC, Texas, Colorado is:
+
+$165,600—$263,304 USD
+
+The base salary range for this full-time position in the location of St. Louis is:
+
+$138,000—$219,420 USD
+
+PLEASE NOTE: Our policy requires a 90-day waiting period before reconsidering candidates for the same role. This allows us to ensure a fair and thorough evaluation of all applicants.
+
+About Us:
+
+At Scale, we believe that the transition from traditional software to AI is one of the most important shifts of our time. Our mission is to make that happen faster across every industry, and our team is transforming how organizations build and deploy AI. Our products power the world's most advanced LLMs, generative models, and computer vision models. We are trusted by generative AI companies such as OpenAI, Meta, and Microsoft, government agencies like the U.S. Army and U.S. Air Force, and enterprises including GM and Accenture. We are expanding our team to accelerate the development of AI applications.
+
+We believe that everyone should be able to bring their whole selves to work, which is why we are proud to be an inclusive and equal opportunity workplace. We are committed to equal employment opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, citizenship, marital status, disability status, gender identity or Veteran status. 
+
+We are committed to working with and providing reasonable accommodations to applicants with physical and mental disabilities. If you need assistance and/or a reasonable accommodation in the application or recruiting process due to a disability, please contact us at accommodations@scale.com. Please see the United States Department of Labor's Know Your Rights poster for additional information.
+
+We comply with the United States Department of Labor's Pay Transparency provision. 
+
+PLEASE NOTE: We collect, retain and use personal data for our professional business purposes, including notifying you of job opportunities that may be of interest and sharing with our affiliates. We limit the personal data we collect to that which we believe is appropriate and necessary to manage applicants’ needs, provide our services, and comply with applicable laws. Any information we collect in connection with your application will be treated in accordance with our internal policies and programs designed to protect personal data. Please see our privacy policy for additional information.

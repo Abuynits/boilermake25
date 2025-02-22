@@ -55,4 +55,3 @@ Icon
 # Project specific
 config/secrets.json
 *.log
-*.pdf

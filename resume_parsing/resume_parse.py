@@ -1,11 +1,12 @@
-import json
 import os
+import json
 
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import PyPDFLoader
-from resume_parsing.format import CSResume
+from resume_parsing.json_format import CSResume, CSJobPosting
+from .prompts import resume_prompt_template, posting_prompt_template
 
 ############################# UTIL FUNCTIONS ############################# 
 
@@ -21,8 +22,8 @@ def load_secrets():
     except json.JSONDecodeError:
         raise ValueError("secrets.json is not a valid JSON file")
 
-def load_resume(file_path: str) -> str:
-    if file_path.lower().endswith(".pdf"):
+def load_input(file_path: str, is_txt: bool=False) -> str:
+    if file_path.lower().endswith(".pdf") and not is_txt:
         loader = PyPDFLoader(file_path)
         documents = loader.load()
         # Join content from all pages
@@ -36,44 +37,20 @@ def load_resume(file_path: str) -> str:
 
 ############################# TEMPLATE ############################# 
 
-parser = JsonOutputParser(pydantic_object=CSResume)
-prompt_template = """
-You are a resume parser specialized in condensed computer science resumes.
-Given the resume text below, extract the following details:
-```
+resume_parser = JsonOutputParser(pydantic_object=CSResume)
+posting_parser = JsonOutputParser(pydantic_object=CSJobPosting)
 
-Personal Information:
-  - Name, Email (required), Phone (if available), and online links (GitHub, LinkedIn, Website if available).
-
-Education (if present):
-  - For each entry: Institution, Degree, Start Date (YYYY-MM-DD), End Date (if available), and GPA (if available).
-
-Experience:
-  - For each job: Company, Role, Start Date (YYYY-MM-DD), End Date (if available), and key, abbreviated, highlights.
-
-Projects:
-  - For each project: Title, Description, URL (if available), and Technologies (if available).
-
-Skills:
-  - A list of skills.
-
-Certifications (if any):
-  - For each certification: Title, Issuer, and Date (YYYY-MM-DD).
-
-Awards (if any):
-  - For each award: Title, Awarder, and Date (YYYY-MM-DD).
-
-Resume:
-{resume_text}
-
-Return the output as valid JSON conforming to this schema:
-{format_instructions}
-"""
 secrets = load_secrets()
-prompt = PromptTemplate(
+resume_prompt = PromptTemplate(
     input_variables=["resume_text"],
-    partial_variables={"format_instructions": parser.get_format_instructions()},
-    template=prompt_template,
+    partial_variables={"format_instructions": resume_parser.get_format_instructions()},
+    template=resume_prompt_template,
+)
+
+posting_prompt = PromptTemplate(
+    input_variables=["posting_text"],
+    partial_variables={"format_instructions": posting_parser.get_format_instructions()},
+    template=posting_prompt_template,
 )
 ################################################################ 
 
@@ -81,14 +58,19 @@ prompt = PromptTemplate(
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
 
 # Build the chain using the pipe syntax.
-chain = prompt | llm | parser
+resume_chain = resume_prompt | llm | resume_parser
+posting_chain = posting_prompt | llm | posting_parser
 
-resume_path = "jonathan_oppenheimer_resume.pdf" 
-resume_text = load_resume(resume_path)
+resume_path = "./input/resume.pdf" 
+posting_path = "./input/job_posting.txt"
+
+resume_text = load_input(resume_path, is_txt=False)
+posting_text = load_input(posting_path, is_txt=True)
+
 # Invoke the chain with the resume text and print the structured JSON output.
-result = chain.invoke({"resume_text": resume_text})
-print(result)
+# resume_result = resume_chain.invoke({"resume_text": resume_text})
+posting_result = posting_chain.invoke({"posting_text": posting_text})
 
 # Save the JSON output to a file
 with open("output/output.json", "w") as f:
-    json.dump(result, f, indent=4)
+    json.dump(posting_result, f, indent=4)
