@@ -1,0 +1,94 @@
+{
+    "name": "Alexiy Buynitsky",
+    "contact": {
+        "phone": "669-246-0140",
+        "email": "abuynits@purdue.edu",
+        "website": "abuynits.github.io",
+        "linkedin": "linkedin.com/in/alexiybuynitsky",
+        "github": "github.com/abuynits"
+    },
+    "goal": "I am a CS and Math double major and I love learning anything new. I want to apply my experiences and knowledge to cutting-edge projects that leverage the forefront of CS. I’m confident my drive, passion, work ethic, and curiosity will help me make valuable contributions.",
+    "education": [
+        {
+            "institution": "Purdue University",
+            "location": "West Lafayette, IN",
+            "degree": "Masters of Science in Computer Science",
+            "dates": "Aug 2024 — May 2026",
+            "GPA": 4.00,
+            "courses": ["Robotic Learning", "Robot Manipulation", "Machine Learning"]
+        },
+        {
+            "institution": "Purdue University",
+            "location": "West Lafayette, IN",
+            "degree": "Bachelors of Science in Computer Science, Bachelors of Science in Mathematics",
+            "dates": "Aug 2022 — May 2025",
+            "GPA": 4.00,
+            "courses": [
+                "Algorithms", "Linear Algebra I & II", "Abstract Algebra", "Systems Programming",
+                "Data Structures & Algorithms", "Real Analysis", "Discrete Math", "Computer Architecture",
+                "C Programming", "Physics E&M", "Statistics", "Complex Analysis", "Artificial Intelligence", "Probability"
+            ]
+        },
+        {
+            "institution": "De Anza College",
+            "location": "Cupertino, CA",
+            "degree": "Double Enrolling HS Student",
+            "dates": "Jun 2021 — Jun 2022",
+            "GPA": 4.00,
+            "courses": ["Differential Equations", "Multivariable Calculus", "C++ Programming", "x86 Programming", "Python Programming"]
+        }
+    ],
+    "experience": [
+        {
+            "title": "AI Engineer Intern",
+            "company": "Armada AI",
+            "location": "Remote",
+            "dates": "Oct 2023 - Present",
+            "responsibilities": [
+                "First Intern at Armada AI building Edge AI Applications for remote compute hardware",
+                "Developing spatially aware CV and LLM robotic control methods by generating synthetic data and finetuning models using SFT and DPO",
+                "Building VideoQA assistant for real-time video Q&A for security camera footage",
+                "Build prompting library with support for customizable prompting formats, single/multi-shot prompting from variable datasets, open/closed source LLMs / custom checkpoints"
+            ]
+        },
+        {
+            "title": "Undergraduate Robotics Researcher",
+            "company": "CoRAL Lab",
+            "location": "Purdue",
+            "dates": "Aug 2023 - Present",
+            "responsibilities": [
+                "Conducting research on robotic learning under the supervision of Professor Ahmed Quresh",
+                "Extended Unitree simulator to support Unitree B1 Quadruped Robot in Gazebo and PyBullet",
+                "Researching Motion Planning in dynamic environments via Network Time Fields and Sign Distance Fields",
+                "Teaching robots to navigate through Purdue with custom knowledge using LLMs, RAG, and vector databases"
+            ]
+        }
+    ],
+    "projects": [
+        {
+            "title": "Gesture Controlled HCI",
+            "technologies": ["Pytorch", "Flask", "MongoDB"],
+            "dates": "Jan 2024 – Mar 2024",
+            "description": [
+                "Built a continuous learning model to detect hand poses at 30FPS allowing for customizable hand poses",
+                "Categorized hand gestures through VLLMs and vector databases and create custom actions using open-interpreter"
+            ]
+        },
+        {
+            "title": "Robotics Mini-Projects",
+            "technologies": ["Pytorch", "Gazebo", "Pybullet", "ROS"],
+            "dates": "Jan 2024 – May 2024",
+            "description": [
+                "Implement (bi)RRT, (bi)RRTConnect, RRT* for cars and 6-DOF arms",
+                "Iterative/Analytic PID for Quadruped robots and 2-DOF arms",
+                "MPNet in 2D/3D environments",
+                "VPG for 2-DOF arm"
+            ]
+        }
+    ],
+    "technical_skills": {
+        "languages": ["Python", "C/C++", "Java", "TypeScript", "C#", "Bash", "x86 Assembly", "SQL"],
+        "frameworks": ["Pytorch", "Tensorflow", "RPC", "ROS", "RestFUL APIs"],
+        "platforms_tools": ["Docker", "Conda", "Catkin", "Linux", "VIM", "Github", "Dagshub", "Onshape"]
+    }
+}
