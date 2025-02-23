@@ -4,9 +4,8 @@ import parsing_utils.bs_utils as bs_utils
 import json
 import os
 from urllib.request import urlopen
-gh_username = 'SpideR1sh1'
+gh_username = 'Abuynits'
 data = np.load(Path(__file__).parent / 'data' / 'user_repo.npy')
-breakpoint()
 readme_files = ['readme.md', 'README.md', "README.MD", "Readme.md", "ReadMe.md", "ReadMe.MD"]
 for (gh_path, owner_type, commit_count) in data:
     gh_path = str(gh_path)
@@ -30,7 +29,7 @@ for (gh_path, owner_type, commit_count) in data:
     repo_owner = gh_path.split('/')[0]
     
     description = bs_utils.extract_desc_from_repo(repo_owner, repo_name)
-    prev_commits = bs_utils.filter_commits_by_user_in_repo(gh_username, repo_owner, gh_username)
+    prev_commits = bs_utils.filter_commits_by_user_in_repo(repo_owner, repo_name, gh_username)
     data = {
         'description': description,
         'readme': output,
