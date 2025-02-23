@@ -93,7 +93,7 @@ def get_code_snippet(git_url, topic, seed=1):
         # response_model=SnippetModel,
         model="llama-3.3-70b-versatile",
         temperature=0.2,
-        # stream=True
+        stream=True
     )
 
     # out = completion.choices[0].message.content
