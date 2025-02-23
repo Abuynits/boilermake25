@@ -43,3 +43,38 @@ def extract_desc_from_repo(user, repo):
     soup = BeautifulSoup(response.text, "html.parser")
     desc = soup.find_all("p", class_="f4 my-3")
     return None if len(desc) == 0 else desc[0].text.strip()
+
+def extract_files_from_gh(user, repo):
+    def extract_files_from_dir(user,repo, path):
+        # https://github.com/CoMMALab/mpinets/tree/main/mpinets
+        url = f"https://github.com/{user}/{repo}/tree/main/{path}"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+        desc = soup.find_all("a", class_="Link--primary")
+        files = [f'{path}/{d.text}' for d in desc if d.get('aria-label') is not None and 'Directory' not in d.get('aria-label')]
+        dirs = [d.text for d in desc if d.get('aria-label') is not None and 'Directory' in d.get('aria-label')]
+        for dir in dirs:
+            files += extract_files_from_dir(user, repo, f"{path}/{dir}")
+        return files
+    # https://github.com/jinensetpal/boilerbot
+    # <a title="ssvqe.py" aria-label="ssvqe.py, (File)" class="Link--primary" href="/SpideR1sh1/Variational-Quantum-Eigensolver/blob/main/ssvqe.py">ssvqe.py</a>
+    # <a title="docker" aria-label="docker, (Directory)" class="Link--primary" href="/CoMMALab/mpinets/tree/main/docker">docker</a>
+    # <a title="neural_cc" aria-label="neural_cc, (Directory)" class="Link--primary" href="/CoMMALab/mpinets/tree/main/mpinets/neural_cc">neural_cc</a>
+    url = f"https://github.com/{user}/{repo}"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    desc = soup.find_all("a", class_="Link--primary")
+    files = [d.text for d in desc if d.get('aria-label') is not None and 'Directory' not in d.get('aria-label')]
+    dirs = [d.text for d in desc if d.get('aria-label') is not None and 'Directory' in d.get('aria-label')]
+    for tgt_dir in dirs:
+        files += extract_files_from_dir(user,repo, tgt_dir)
+    return files 
+
+def extract_email_from_repo(gh_username):
+    # https://github.com/jinensetpal/boilerbot
+    url = f"https://github.com/{gh_username}/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    # <a class="Link--primary" href="mailto:abuynits@gmail.com">abuynits@gmail.com</a>
+    desc = soup.find_all("a", class_="Link--primary")
+    return None if len(desc) == 0 else desc[0].text.strip()

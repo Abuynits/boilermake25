@@ -1,0 +1,139 @@
+{
+    "project_data": [
+        [
+            {
+                "title": "Purdue Space Program Liquids",
+                "description": "Developing flight-critical software for a bipropellant rocket.",
+                "technologies": [
+                    "C",
+                    "FreeRTOS"
+                ],
+                "url": null
+            },
+            {
+                "description": null,
+                "readme": "# PSPL_CMS_AVIONICS_COTS_FSW\n\n## Dependencies\n- Docker\n\n## Build Steps\n```\n./build.sh\n```\n",
+                "prev_commits": [
+                    "simplify cmake file"
+                ],
+                "title": "PSPL_CMS_AVIONICS_COTS_FSW",
+                "owner": "Purdue-Space-Program",
+                "commits": 1
+            },
+            "tbd",
+            4,
+            "Reasoning: The git log indicates a series of incremental contributions, with a good balance between complex feature development and minor adjustments. While there are some large initial commits, they appear to be foundational components rather than outright copies. The commits demonstrate a progression of understanding and capability, aligning with the ambitious project description. However, without specific details regarding the exact nature of contributions, some caution is warranted, preventing a perfect score."
+        ],
+        [
+            {
+                "title": "ML@Purdue",
+                "description": "Trained a PPO-based model in a simulation for a VEX robotics game.",
+                "technologies": null,
+                "url": null
+            },
+            "None",
+            "YELLOW",
+            -1,
+            "No project found"
+        ],
+        [
+            {
+                "title": "Personal Projects",
+                "description": "Various personal projects including a statically-typed functional programming language and a CPU ray tracer.",
+                "technologies": null,
+                "url": "sagarpatil.me"
+            },
+            "None",
+            "YELLOW",
+            -1,
+            "No project found"
+        ]
+    ],
+    "experience_data": [
+        [
+            "Performed software development tasks on the Autopilot hardware post-silicon validation team",
+            5,
+            "   Reasoning: Performing software development tasks related to autopilot hardware validation is a credible role and aligns with industry standards."
+        ],
+        [
+            "Tasks include test infrastructure for autopilot hardware, debugging kernel & firmware",
+            5,
+            "   Reasoning: Creating test infrastructure and debugging are standard responsibilities in post-silicon validation; the specifics mentioned are plausible."
+        ],
+        [
+            "Ported BitBake (Yocto) recipes developed for Jetson to Raspberry Pi",
+            4,
+            "   Reasoning: Porting Yocto recipes from one platform to another is feasible but requires expertise; while plausible, it is dependent on the complexity of the recipes."
+        ],
+        [
+            "Implemented alternate firmware signature scheme on the Ardupilot firmware",
+            4,
+            "   Reasoning: Implementing a firmware signature scheme indicates advanced knowledge, though it might be challenging to verify without additional context."
+        ],
+        [
+            "Partially automated GPS acceptance testing",
+            4,
+            "   Reasoning: Partially automating GPS acceptance testing is a valid initiative, aligning with testing practices, though \"partially\" raises some ambiguity on the level of automation."
+        ],
+        [
+            "Wrote TUN driver over BD Spot SDK",
+            3,
+            "   Reasoning: Writing drivers can be complex and requires specialized knowledge, yet the specific details regarding the BD Spot SDK are unclear."
+        ],
+        [
+            "Developed UI for Meta SAM-2 for automatic labeling of videos",
+            4,
+            "   Reasoning: Developing a UI for labeling videos is a practical task that is often undertaken in tech environments, though specifics on the project would enhance credibility."
+        ],
+        [
+            "Assisting a lab section of ~30 students with projects",
+            5,
+            "   Reasoning: Assisting a lab section effectively is a common responsibility in educational settings and aligns with academic support tasks."
+        ],
+        [
+            "Holding office hours to help students with lab assignments",
+            5,
+            "   Reasoning: Holding office hours and helping students is standard for academic roles, making this claim valid."
+        ],
+        [
+            "Grading lab assignments and providing feedback",
+            5,
+            "    Reasoning: Grading assignments and providing feedback is a typical duty for educators and reflects practical experience in teaching."
+        ],
+        [
+            "Added support for glTF models and 3D Tiles in STK\u2019s Electro-Optical/IR simulation",
+            4,
+            "    Reasoning: Adding support for glTF models is a legitimate enhancement, although the depth of implementation would need further context."
+        ],
+        [
+            "Refactored legacy C++ to modern idioms",
+            4,
+            "    Reasoning: Refactoring legacy C++ code is a credible and valuable practice in software maintenance, but clarity on the extent and outcome would strengthen the claim."
+        ],
+        [
+            "Implemented GPU acceleration to graphics-based analysis tools",
+            4,
+            "    Reasoning: GPU acceleration is a common enhancement in graphics applications, but the details of implementation might affect credibility."
+        ],
+        [
+            "Gained experience working in a large C++ codebase",
+            5,
+            "    Reasoning: Gaining experience in a large C++ codebase is a valid claim and would be typical for roles requiring collaboration in large projects."
+        ],
+        [
+            "Implemented new ITU-RF radio propagation standards",
+            4,
+            "    Reasoning: Implementing new radio propagation standards is a valid activity within telecommunications and would demonstrate technical ability, though specifics are necessary for full verification."
+        ],
+        [
+            "Implemented an architecture for unit testing",
+            4,
+            "    Reasoning: Creating a unit testing architecture is relevant to software quality assurance; further details about implementation would clarify this claim."
+        ],
+        [
+            "Developed internal web application for NER labeling using React/Flask/MySQL",
+            5,
+            "    Reasoning: Developing a web application using common frameworks like React, Flask, and MySQL is credible and reflects current industry practices."
+        ]
+    ]
+}

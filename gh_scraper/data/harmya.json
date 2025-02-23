@@ -1,0 +1,241 @@
+{
+    "project_data": [
+        [
+            {
+                "title": "RAG Assisted Knowledge Distillation",
+                "description": "Used RAG-assisted teacher models and frameworks to enhance domain-specific question answering.",
+                "url": null,
+                "technologies": [
+                    "Python",
+                    "Hugging Face"
+                ]
+            },
+            {
+                "description": "Using RAG to enhance knowledge distillation",
+                "readme": "# Leveraging RAG-Assisted Teacher Models in Knowledge-Distillation for Enhanced Domain-Specific Question Answering\n\nCode for CS577 Natural Language Processing project. The `src` directory contains the source code for the majority of our experiments. We also experimented with available KD frameworks like [MiniLLM](https://github.com/microsoft/LMOps/tree/main/minillm) and [Distilling Step-by-Step](https://github.com/google-research/distilling-step-by-step). All the models and tokenizers are pulled from the [huggingface](https://pypi.org/project/transformers/) hub.\n\n## Data Preprocessing\nWe utilize the [SQuAD dataset](https://rajpurkar.github.io/SQuAD-explorer/) as our primary benchmark and distillation dataset. Our preprocessing script `preprocess.py` converts the raw SQuAD data into a uniform format to be passed into the model. The two eval scripts `eval.py` and `eval2.py` generate predictions for `dev` set, and we use SQuAD's official evaluation script (`squad_eval.py` in our code) to compute metrics over the gold outputs and our predictions. \n\n## Knowledge Bases\nWe use [Cohere's wikipedia embeddings](https://huggingface.co/datasets/Cohere/wikipedia-22-12-simple-embeddings) as our generic knowledge base, the `knowledge.py` script generates context for the teacher models using Cohere's API.\n\n## Knowledge Distillation Training\nWe have different scripts corresponding to different experiments we ran throughout the project. `finetune.py` fine-tunes a given model from Hugging Face hub on a given dataset, and `distill.py` distills knowledge using the logits from the teacher model. Additionally, `student.py` and `teacher.py` contain definitions of one iteration of experiments, and `dataloader.py` contains the dataloader used in training.\n\nBy Harmya, Sarthak\n",
+                "prev_commits": [
+                    "new",
+                    "Added new code, copied files to ssh server",
+                    "real",
+                    "real",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server",
+                    "Added new code, copied files to ssh server"
+                ],
+                "title": "rag-distillation",
+                "owner": "harmya",
+                "commits": 35
+            },
+            "tbd",
+            4,
+            "Reasoning: The candidate's contributions illustrate a solid understanding of the topic, with several commits showcasing iterative development rather than large bulk additions. The commits include modifications to both algorithms and documentation, showing meaningful engagement with the project. However, there are minor instances of varied coding styles that suggest possible collaboration or adaptation from external sources, which slightly detracts from a perfect score. Overall, the work appears to be mostly original and relevant to the project's description."
+        ],
+        [
+            {
+                "title": "Indoor Scene Recognition",
+                "description": "Utilized YOLOv9 to capture object-level details for indoor scene recognition.",
+                "url": null,
+                "technologies": [
+                    "Python",
+                    "PyTorch"
+                ]
+            },
+            {
+                "description": "Using a novel approach of bound embeddings, using yolov9 to generate local information about objects in an image and then passing it to a classification model",
+                "readme": "# Indoor Scene Recognition\nNovel approach of bound embeddings, using yolov9 to generate local information about objects in an image and then passing it to a pre-trained image classification model.",
+                "prev_commits": [
+                    "Merge branch 'main' of https://github.com/harmya/indoor-scene-recognition",
+                    "lel",
+                    "added gitignore",
+                    "Merge branch 'main' of https://github.com/harmya/indoor-scene-recognition",
+                    "first",
+                    "Initial commit"
+                ],
+                "title": "indoor-scene-recognition",
+                "owner": "harmya",
+                "commits": 6
+            },
+            "tbd",
+            2,
+            "Reasoning: The initial commit includes a substantial amount of code that appears to originate from external sources related to YOLOv9. While there are some subsequent commits that show attempts at understanding and modifying the code, they are minimal and do not demonstrate a consistent growth or deep engagement with the project. The lack of detailed implementation notes and the presence of large blocks of unfamiliar content raise concerns about the originality of the work."
+        ],
+        [
+            {
+                "title": "Computed Tomography",
+                "description": "Implementation of tomographic reconstruction used by CT-Scan machines.",
+                "url": null,
+                "technologies": [
+                    "Python"
+                ]
+            },
+            {
+                "description": "Simulation of a tomographic reconstruction in CT scan machines",
+                "readme": "# Computed Tomography\n\nTomographic reconstruction is a type of inverse problem where the challenge is to yield an estimate of a specific system from a finite number of projections.\nOne of the coolest parts of this process is the fourier slice theorem: the 1D Fourier Transform of the projection of an object at angle $\\Theta$ is equal to the slice of the 2D Fourier Transform of the object at angle $\\Theta$.\nUsing this, we can take multiple projections to construct the 2D Fourier Transform of the object, and then take its inverse to get the original object.\n\n# Example\n![CAT Scan](https://github.com/harmya/tomography/blob/main/assets/dogscan.gif)\n",
+                "prev_commits": [
+                    "Merge branch 'main' of https://github.com/harmya/tomography",
+                    "final version",
+                    "Update README.md",
+                    "Update README.md",
+                    "no real image animation",
+                    "Merge branch 'main' of https://github.com/harmya/tomography",
+                    "fixed fft mask",
+                    "Update README.md",
+                    "Update README.md",
+                    "Update README.md",
+                    "Update README.md",
+                    "Final assets",
+                    "uploaded demo",
+                    "all animations work",
+                    "Add files via upload",
+                    "Delete josh.gif",
+                    "Update README.md",
+                    "readme update",
+                    ".gitignore is now working",
+                    "Merge branch 'main' of https://github.com/harmya/tomography",
+                    "gitignore",
+                    "Create README.md",
+                    "works, have to implement fourier slice theorem",
+                    "no animation"
+                ],
+                "title": "tomography",
+                "owner": "harmya",
+                "commits": 24
+            },
+            "tbd",
+            4,
+            "Reasoning: The project shows a good understanding of tomographic reconstruction principles and exhibits thoughtful implementation. The git log indicates a single commit that introduced the entire structure of the project, with a detailed README file explaining the concept. While the project does feature a substantial amount of code in the initial commit, it also demonstrates complexity and originality in its content. There are no immediate red flags such as blatant code plagiarism or minimal contributions, but there could be concerns regarding whether further development occurred beyond this initial commit. This results in a high but not perfect score, as the contribution pattern suggests the possibility of insufficient iterative development over time."
+        ],
+        [
+            {
+                "title": "Error Correction in Noisy Channels",
+                "description": "Designed a sender-receiver model using Huffman encoding for data compression.",
+                "url": null,
+                "technologies": [
+                    "Rust"
+                ]
+            },
+            {
+                "description": "Implementation of ECCs over a noisy sender-receiver message channel",
+                "readme": "### Implementation of a sender and receiver that use algorithms for error correction codes to pass messages in a noisy channel\n\nUse huffman encoding to compress and decompress data. Implement error correcting codes for this encoded data and verify by randomly flipping bits in the encoded data. I am still working on implementing the error correction. Will implement Parity, Triple modular redundancy, Hamming Codes, Extended Hamming Codes, RSC\n\n### Setup\n\nImagine you some vocabulary declared like this:\n\n```rust\nconst VALID_WORDS: [&str; 13] = [\n    \"hello\", \"how\", \"are\", \"you\", \" \", \"#\", \"mikail\", \"saad\", \"sagar\", \"is\", \"sarthak\", \"so\",\n    \"cooked\",\n];\n```\n\nYou can encode a message like this:\n\n```rust\nlet message = \"hello how are you\";\n```\n\nWe can use the vocabulary to design a huffman encoding table that we can send as a part of the message:\n\n```rust\nHuffmanEncoding { encoding: {'e': \"0000\", 'u': \"0011\", 'a': \"110\", 'g': \"111010\", 'p': \"111101\", 't': \"111110\", 'w': \"111111\", 'o': \"1011\", 'd': \"0111\", 'i': \"100\", 'k': \"111011\", 'h': \"0001\", 'r': \"0010\", 's': \"010\", 'y': \"0110\", 'l': \"1010\", ' ': \"111000\", 'm': \"111100\", '#': \"111001\"}, max_size: 6 }\n```\n\nNow, using this we can encode the message as:\n\n```rust\nEncoded Message: 111100100111011110100101011100010001011100001011111000111111011000111111001\n```\n\nThen, we can select what error correction strategy we want to use:\n```\nChoose error correction method:\n1. Parity (Detects errors, no correction)\n2. TPC (Corrects small errors, uses more space)\n3. Hamming (Detects and corrects single-bit errors)\n```\nNow, based on the selected strategy, we add noise to the data in the follwing way:\n1. Parity: Flip a random bit\n2. TPC: Select the first chunk. Generate a random number k between 1 and length / 2. Randomly select and flip k bits.\n3. Hamming: Select a number between 1 and 2. Flip those number of bits.\n\nNow the sender sends this to the receiver (server)\n\nAfter receving the message and the table, we first decode the table, then we decode the message using the table in the receiver. (We send the table ONCE at the start when the server receives a connection)\n\n### Parity Bit\nMost naive method. Can only help in knowing IF an error occurred not WHERE it occurred.\nDuring encoding: just add a 0 or 1 at the start of the message to make sure that the number of ones in the message is even\nDuring decoding: check if number of ones is even, if not then error, otherwise good\n\n### Triple modular redundancy\nStill kinda naive. We just repeat the message 3 times.\nDuring encoding: repeat the message three times\nDuring decoding: divide the message in chunks of three, check if each bit matches across all three. If not, then vote 2/3 for the value of that bit.\n\n### Hamming Code\nFor ocating 1 bit errors. By just using 9 extra bits for a message of length ~500, we can detect and correct 1 bit errors. \nDuring encoding: Construct an empty message size of length m + parity bits p such that 2^p >= p + m. Now, let the parity bits be p1, p2, p3...Then, p1 makes sure that the parity of every bit location which has 1 in the 1st place (least significant) is even, p2 makes sure that the parity of every bit location which has 1 in the 2nd place (least significant) is even and so on. \nDuring decoding: Re-check the parity bits similar to the encoding. Keep track of the how many parity bits show error and then add them. Why add? Consider p1 bit is wrong, then I know that some bit with a 1 in the 1st place is wrong, and then if p2 is wrong, I also know that some bit with 1 in the 2nd place is wrong. Hence, the incorrect bit should x...xx11. \n\n### Extended Hamming Code\nSame as hamming code with a difference: can detect but not correct double bit errors. \nDuring encoding: We use a 0th parity bit to store the parity of the entire message.\nDuring decoding: We first corect the 1 bit errors. Now, if the 0th bit's parity is still wrong, then there is a double bit error.\n\n### Reed Soloman Codes\nTodo\n",
+                "prev_commits": [
+                    "Update rust.yml",
+                    "Update rust.yml",
+                    "Update rust.yml",
+                    "Update rust.yml",
+                    "Create rust.yml",
+                    "Merge branch 'main' of https://github.com/harmya/error-correcting-codes",
+                    "cooked",
+                    "Update README.md",
+                    "added menu for correction method",
+                    "yay hamming works",
+                    "changed for borrowing shit",
+                    "changed noise for the parameters",
+                    "all tests pass",
+                    "some tests pass",
+                    "remove prints",
+                    "guh",
+                    "hamming decode and encode",
+                    "parity bits",
+                    "add hamming code function",
+                    "Update README.md",
+                    "failing test because of random change",
+                    "added tests for triple",
+                    "update tests and add triple",
+                    "wrapped correction methods",
+                    "arpit bala",
+                    "Update README.md",
+                    "Update README.md",
+                    "remove comments",
+                    "LESSGOOOO converted to sender receiver",
+                    "update to a sender receiver model using tcp stream",
+                    "Update README.md",
+                    "added tests",
+                    "Update README.md",
+                    "Update README.md",
+                    "update readme + some changes"
+                ],
+                "title": "error-correcting-codes",
+                "owner": "harmya",
+                "commits": 35
+            },
+            "tbd",
+            4,
+            "Reasoning: The candidate's implementation demonstrates a sound understanding of data compression and error correction through Huffman encoding and various algorithms for error detection and correction. The structure of the repository is clear, and the README provides detailed setup instructions and explanations of the implemented methods, which align with the description in the resume. \n\nUpon reviewing the Git log, contributions are consistent, and there is no indication of copy-pasting or last-minute bursts of activity. The implementation appears original, with meaningful code contributions across various modules, including error handling and networking. However, while the work is impressive, there is still room for improvement, particularly in the completeness of the description regarding future work on certain algorithms."
+        ]
+    ],
+    "experience_data": [
+        [
+            "Managed and led a team of 30 TAs for conducting weekly office hours",
+            4,
+            "   Reasoning: Managing a large group of teaching assistants is plausible, but the actual responsibility and effectiveness might vary depending on the context or institution."
+        ],
+        [
+            "Developed instructional content including exams and assignments",
+            5,
+            "   Reasoning: Developing instructional content is a standard task in many educational and instructional roles and is entirely credible."
+        ],
+        [
+            "Implemented machine learning models in Python using PyTorch",
+            5,
+            "   Reasoning: Implementing machine learning models using popular tools like Python and PyTorch is a valid skill in the tech industry."
+        ],
+        [
+            "Developed an ETL pipeline using Kafka for real-time data ingestion",
+            4,
+            "   Reasoning: While developing an ETL pipeline using Kafka is a reasonable claim, the complexity and success of such a project can depend on specific experience and context."
+        ],
+        [
+            "Delivered 20+ front-end and back-end features using Java, Reactjs, MongoDB",
+            4,
+            "   Reasoning: Delivering features using technologies like Java, Reactjs, and MongoDB is a credible claim; however, the count of 20+ may raise questions depending on the duration."
+        ],
+        [
+            "Developed and trained a Multi-Label Classifier in Python using PyTorch",
+            5,
+            "   Reasoning: Developing and training classifiers is a common and valid task in machine learning, especially using popular libraries such as PyTorch."
+        ],
+        [
+            "Deployed Flask API on AWS EC2 instances using Docker",
+            5,
+            "   Reasoning: Deploying a Flask API on AWS using Docker is a well-known practice, and thus entirely credible."
+        ],
+        [
+            "Created data pipelines using web scraping and data mining frameworks",
+            4,
+            "   Reasoning: Creating data pipelines with web scraping and data mining frameworks is feasible, but the effectiveness and scope can vary based on specific tools and projects."
+        ],
+        [
+            "Developed Natural Language Processing (NLP) Models using PyTorch",
+            5,
+            "   Reasoning: Developing NLP models using robust frameworks like PyTorch is a common task in the machine learning field, and thus entirely valid."
+        ]
+    ]
+}
