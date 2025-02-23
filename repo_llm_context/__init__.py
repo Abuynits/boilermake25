@@ -6,9 +6,11 @@ import subprocess
 from hashlib import md5
 from pathlib import Path
 from joblib import Memory
-from .groq import groq_filter_list
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
+
+from .scc_runner import run_scc
+from .groq import groq_filter_list
 from .code_exts import code_file_extensions as lang_exts
 
 CACHE_DIR = Path("./.cache")
@@ -138,27 +140,14 @@ def repo_to_commits(path: Path, gh_username: str, char_limit=350000):
 def repo_to_context_json(path: Path, topic: str, char_limit):
     char_limit *= 0.94  # account for xml tags overhead
 
-    cmd = [
-        "docker",
-        "run",
-        "--rm",
-        "-v",
-        f"{path.absolute()}:/repo",
-        "ghcr.io/boyter/scc:master",
-        "scc",
+    scc_args = [
         "--by-file",
         "--format",
         "json",
-        "/repo",
+        str(path),
     ]
 
-    scc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    out, _ = scc.communicate()
-    out = out.decode("utf-8")
-    out = out.replace('"/repo', f'"{path}')
-    if scc.returncode != 0:
-        raise Exception("scc failed")
-
+    out = run_scc(scc_args)
     out = json.loads(out)
     # print(json.dumps(out, indent=2), file=sys.stderr)
     code_files = transform_scc(out)
