@@ -1,0 +1,83 @@
+{
+  search(
+    query: "is:pr is:merged label:\"good first issue\" language:JavaScript -label:documentation comments:>1 commits:1..5"
+    type: ISSUE
+    first: 20
+  ) {
+    nodes {
+      ... on PullRequest {
+        title
+        url
+        body
+        createdAt
+        mergedAt
+        author {
+          login
+          url
+          avatarUrl
+        }
+        repository {
+          nameWithOwner
+          url
+          description
+          repositoryTopics(first: 10) {
+            nodes {
+              topic {
+                name
+              }
+            }
+          }
+          object(expression: "HEAD:README.md") {
+            ... on Blob {
+              text
+            }
+          }
+          packageJson: object(expression: "HEAD:package.json") {
+            ... on Blob {
+              text
+            }
+          }
+        }
+        labels(first: 10) {
+          nodes {
+            name
+            description
+          }
+        }
+        comments(first: 10) {
+          totalCount
+          nodes {
+            body
+            author {
+              login
+              url
+            }
+            createdAt
+          }
+        }
+        reviews(first: 5) {
+          totalCount
+          nodes {
+            state
+            body
+            author {
+              login
+              url
+            }
+            submittedAt
+          }
+        }
+        additions
+        deletions
+        changedFiles
+        files(first: 10) {
+          nodes {
+            path
+            additions
+            deletions
+          }
+        }
+      }
+    }
+  }
+}
