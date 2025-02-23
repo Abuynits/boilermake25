@@ -36,29 +36,29 @@ def load_input(file_path: str, is_txt: bool=False) -> str:
 
 ############################# TEMPLATE ############################# 
 
-# resume_parser = JsonOutputParser(pydantic_object=CSResume)
-# posting_parser = JsonOutputParser(pydantic_object=CSJobPosting)
+resume_parser = JsonOutputParser(pydantic_object=CSResume)
+posting_parser = JsonOutputParser(pydantic_object=CSJobPosting)
 
-# secrets = load_secrets()
-# resume_prompt = PromptTemplate(
-#     input_variables=["resume_text"],
-#     partial_variables={"format_instructions": resume_parser.get_format_instructions()},
-#     template=resume_prompt_template,
-# )
+secrets = load_secrets()
+resume_prompt = PromptTemplate(
+    input_variables=["resume_text"],
+    partial_variables={"format_instructions": resume_parser.get_format_instructions()},
+    template=resume_prompt_template,
+)
 
-# posting_prompt = PromptTemplate(
-#     input_variables=["posting_text"],
-#     partial_variables={"format_instructions": posting_parser.get_format_instructions()},
-#     template=posting_prompt_template,
-# )
-# ################################################################ 
+posting_prompt = PromptTemplate(
+    input_variables=["posting_text"],
+    partial_variables={"format_instructions": posting_parser.get_format_instructions()},
+    template=posting_prompt_template,
+)
+################################################################ 
 
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
 
-# # Build the chain using the pipe syntax.
-# resume_chain = resume_prompt | llm | resume_parser
-# posting_chain = posting_prompt | llm | posting_parser
+# Build the chain using the pipe syntax.
+resume_chain = resume_prompt | llm | resume_parser
+posting_chain = posting_prompt | llm | posting_parser
 
-# # Initialize the chains for use by the API
-# resume_chain = resume_prompt | llm | resume_parser
-# posting_chain = posting_prompt | llm | posting_parser
+# Initialize the chains for use by the API
+resume_chain = resume_prompt | llm | resume_parser
+posting_chain = posting_prompt | llm | posting_parser
