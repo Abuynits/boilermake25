@@ -1,9 +1,8 @@
-import datetime
 import hashlib
 import json
 import os
 import tempfile
-from typing import Dict, Tuple, Any, Union 
+from typing import Dict, Any, Union 
 from starlette.datastructures import UploadFile
 
 from resume_parsing.parse import load_input, resume_chain, posting_chain
