@@ -1,26 +1,22 @@
-'use client';
+"use client";
 
-import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
-import styles from './styles.module.css';
-import { BREADCRUMB_ITEMS, ROUTES, type BreadcrumbItem } from './config';
+import { useRouter, usePathname } from "next/navigation";
+import { useState } from "react";
+import styles from "./styles.module.css";
+import { BREADCRUMB_ITEMS, ROUTES, type BreadcrumbItem } from "./config";
 
 export default function Breadcrumbs() {
   const router = useRouter();
   const pathname = usePathname();
   const [showWarning, setShowWarning] = useState(false);
   const [warningPath, setWarningPath] = useState<string | null>(null);
-  
-  // Get the hash from the current path
-  const hash = pathname.split('/').pop();
-  
+
   // Determine which items to show based on the current path
-  const currentPath = `/${pathname.split('/')[1]}`;
-  const items = BREADCRUMB_ITEMS.map(item => ({
+  const currentPath = `/${pathname.split("/")[1]}`;
+  const items = BREADCRUMB_ITEMS.map((item) => ({
     ...item,
     current: item.path === currentPath,
-    // Add hash to paths except home
-    path: item.path === ROUTES.UPLOAD ? item.path : `${item.path}/${hash}`
+    path: item.path === ROUTES.UPLOAD ? item.path : `${item.path}`,
   }));
 
   const handleNavigation = (item: BreadcrumbItem) => {
@@ -58,18 +54,25 @@ export default function Breadcrumbs() {
               </button>
             ) : (
               <span
-                className={item.current ? styles.breadcrumbCurrent : styles.breadcrumbInactive}
+                className={
+                  item.current
+                    ? styles.breadcrumbCurrent
+                    : styles.breadcrumbInactive
+                }
               >
                 {item.label}
               </span>
             )}
-            {index < items.length - 1 && <span className={styles.breadcrumbSeparator}>/</span>}
+            {index < items.length - 1 && (
+              <span className={styles.breadcrumbSeparator}>/</span>
+            )}
           </div>
         ))}
       </div>
       {showWarning && (
         <div className={`${styles.notification} ${styles.errorNotification}`}>
-          Warning: Going back to the upload page will reset your progress. Click the button again to confirm.
+          Warning: Going back to the upload page will reset your progress. Click
+          the button again to confirm.
         </div>
       )}
     </>

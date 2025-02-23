@@ -1,11 +1,21 @@
 import os
 import uvicorn
 
-from fastapi import Depends, Request, HTTPException, FastAPI, File, Response, UploadFile, Form
+from fastapi import (
+    Depends,
+    Request,
+    HTTPException,
+    FastAPI,
+    File,
+    Response,
+    UploadFile,
+    Form,
+)
 from starlette.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import tempfile
 from uuid import uuid4
 
 from .resume_analyzer import process_resume_and_posting
@@ -20,6 +30,7 @@ class SessionData:
 
 
 sessions = {}
+
 
 class CodeRequest(BaseModel):
     code: str
@@ -49,7 +60,9 @@ async def analyze_resume(resume: UploadFile = File(...), job_posting: str = Form
     res = Response()
     session = str(uuid4())
     sessions[session] = SessionData(resume_content, job_posting)
-    res.set_cookie("session", str(session), httponly=True, secure=False, samesite="strict")
+    res.set_cookie(
+        "session", str(session), httponly=True, secure=False, samesite="strict"
+    )
 
     return res
 
@@ -77,52 +90,52 @@ def get_analysis(session_data: SessionData = Depends(get_session)):
 
     return process_resume_and_posting(resume_content, job_posting)
 
+
 @app.post("/api/grift_check")
-async def analyze_resume(
-    hash: str = Form(...)
-):
+def grift_check_endpoint(session_data: SessionData = Depends(get_session)):
     try:
-        # Get the base output directory from the resume analyzer
-        output_dir = os.path.join(os.path.dirname(__file__), 'output', 'resumes', hash)
-        
-        # Find the resume PDF file
-        pdf_files = [f for f in os.listdir(output_dir) if f.endswith('.pdf')]
-        if not pdf_files:
-            raise ValueError(f"No PDF file found in {output_dir}")
-        
-        resume_pdf_path = os.path.join(output_dir, pdf_files[0])
-        resume_json_path = os.path.join(output_dir, 'resumes_analysis.json')
-        
-        if not os.path.exists(resume_pdf_path):
-            raise ValueError(f"Resume PDF not found at {resume_pdf_path}")
-        if not os.path.exists(resume_json_path):
-            raise ValueError(f"Resume analysis not found at {resume_json_path}")
-        
+        resume_data = session_data.resume_content
+        job_posting = session_data.job_post
+
+        proccessed = process_resume_and_posting(resume_data, job_posting)
+        resume_json = proccessed["resume_analysis"]
+
+        # resume_pdf_path = os.path.join(output_dir, pdf_files[0])
+        # resume_json_path = os.path.join(output_dir, "resumes_analysis.json")
+
+        # save both to temp files
+        resume_pdf_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+        resume_pdf_tmp.write(resume_data)
+        resume_pdf_tmp.flush()
+        resume_pdf_path = resume_pdf_tmp.name
+
+        resume_json_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".json")
+        resume_json_tmp.write(resume_json)
+        resume_json_tmp.flush()
+        resume_json_path = resume_json_tmp.name
+
         # Call grift check with the correct paths
         out_path = grift_check(resume_pdf_path, resume_json_path)
         print(f"Generated annotated PDF at: {out_path}")
-        
+
         # Return the full path - we'll serve it directly in a separate endpoint
-        return {
-            "out_path": out_path
-        }
+        return {"out_path": out_path}
     except Exception as e:
         print(f"Error in grift check: {str(e)}")
         return {"error": str(e)}, 500
 
-@app.get("/api/pdf/{hash}")
-async def get_pdf(hash: str):
+
+@app.get("/api/pdf")
+async def get_pdf(session_data: SessionData = Depends(get_session)):
     try:
-        pdf_path = os.path.join(os.path.dirname(__file__), 'output', 'resumes', hash, 'latest_annotated.pdf')
-        print(f"Looking for PDF at: {pdf_path}")
-        if not os.path.exists(pdf_path):
-            raise HTTPException(status_code=404, detail="PDF not found")
-        return FileResponse(pdf_path, media_type='application/pdf')
+        pdf_data = session_data.resume_content
+        return Response(content=pdf_data, media_type="application/pdf")
     except HTTPException as e:
         raise e
     except Exception as e:
         print(f"Error serving PDF: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
