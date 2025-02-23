@@ -22,6 +22,7 @@ def prompt_gpt(prompt, sys_prompt):
     # Replace with your OpenAI API key
     response = client.chat.completions.create(
         model="gpt-4o-mini",  # Adjust based on the available model
+        temperature=0.2,
         messages=[
             {"role": "system", "content": f"{sys_prompt}"},
             {"role": "user", "content": f"{prompt}"}
@@ -155,6 +156,7 @@ def extract_gh_files(resume_data, gh_username, gh_email):
         1 = High likelihood of plagiarism or embellishment
         5 = Original work
 
+    Do not focus on the quality of the commit messages.
     *Red Flags to Watch For*:
     - Large initial commits followed by minimal contributions (suggesting bulk copy-pasting)
     - Code copied from well-known sources (e.g., GitHub repositories, Stack Overflow, or open-source projects)

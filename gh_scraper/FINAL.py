@@ -23,6 +23,7 @@ github_email="hvbhatt@purdue.edu"
 
 resume_name='harmya_bhatt_resume.pdf'
 output_file = resume_name.split('.')[0] + '_annotated.pdf'
+
 tmp_file = resume_name.split('.')[0] + '_tmp.pdf'
 
 
@@ -37,12 +38,14 @@ if not os.path.exists(in_path):
 breakpoint()
 out_path = resume_dir / output_file
 github_username = 'harmya'
+user_json_path = Path(__file__).parent / 'data' / f'{github_username}.json'
 
-breakpoint()
-path = Path(__file__).parent / 'data' / f'{github_username}.json'
-# with open(path, 'r') as f:
-#     rated_resume = json.load(f)
-# annotate_resume(rated_resume, in_path, out_path)
+if os.path.exists(user_json_path):
+    with open(user_json_path, 'r') as f:
+        rated_resume = json.load(f)
+    annotate_resume(rated_resume, in_path, out_path)
+    print("using cached stats")
+    exit(0)
 
 # breakpoint()
 inp = load_input(in_path)
@@ -81,13 +84,13 @@ scrape_readme(github_username, files)
 # breakpoint()
 
 breakpoint()
-path = Path(__file__).parent / 'data' / f'{github_username}.json'
-if not os.path.exists(path):
+
+if not os.path.exists(user_json_path):
     rated_resume = extract_gh_files(resume_result, github_username, github_email)
-    with open(path, 'w') as f:
+    with open(user_json_path, 'w') as f:
         json.dump(rated_resume, f, indent=4)
     annotate_resume(rated_resume, in_path, out_path)
 else:
-    with open(path, 'r') as f:
+    with open(user_json_path, 'r') as f:
         rated_resume = json.load(f)
     annotate_resume(rated_resume, in_path, out_path)
