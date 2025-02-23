@@ -4,6 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import styles from './page.module.css';
 import CodeEditor from '@/components/CodeEditor';
+import AssessmentEditor from '@/components/AssessmentEditor';
 
 export default function Assessment() {
   const router = useRouter();
@@ -45,7 +46,11 @@ export default function Assessment() {
         <p className={styles.description}>Code Editor:</p>
         
         <CodeEditor />
-        
+
+        <p className={styles.description}>Code Review:</p>
+
+        <AssessmentEditor />
+
         <div className={styles.navigation}>
           <button onClick={handleBack} className={styles.backButton}>
             Back to Report

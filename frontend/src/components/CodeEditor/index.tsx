@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import styles from './styles.module.css';
+import { JSX } from 'react/jsx-runtime';
 
 // Dynamically import Monaco Editor
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
@@ -95,9 +96,25 @@ interface Tab {
 
 export default function CodeEditor() {
   const outputRef = useRef<HTMLDivElement>(null);
+  // Force editor to reinitialize after a delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEditorKey(prev => prev + 1);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
   const [deleteConfirmation, setDeleteConfirmation] = useState<DeleteConfirmation | null>(null);
   const [showNewFileDialog, setShowNewFileDialog] = useState(false);
   const [newFileName, setNewFileName] = useState('');
+  const [editorKey, setEditorKey] = useState(0);
+
+  // Force editor to reinitialize after a delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEditorKey(prev => prev + 1);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
   const [files, setFiles] = useState<File[]>([
     {
       name: 'main.py',
@@ -397,10 +414,10 @@ export default function CodeEditor() {
             </select>
           </div>
           <MonacoEditor
+            key={editorKey}
             height="400px"
             language={openTabs.find(tab => tab.id === activeTab)?.language || 'python'}
             value={code}
-            theme="vs-dark"
             onChange={handleCodeChange}
             options={{
               minimap: { enabled: false },
@@ -411,6 +428,13 @@ export default function CodeEditor() {
               roundedSelection: false,
               selectOnLineNumbers: true,
               quickSuggestions: true,
+              theme: 'vs-dark'
+            }}
+            onMount={(editor, monaco) => {
+              monaco.editor.setTheme('vs-dark');
+              editor.updateOptions({
+                theme: 'vs-dark'
+              });
             }}
           />
         </div>

@@ -39,7 +39,7 @@
 }
 
 .content {
-  @apply max-w-4xl mx-auto bg-white p-8 rounded-lg shadow;
+  @apply max-w-6xl mx-auto bg-white p-8 rounded-lg shadow;
 }
 
 .editorContainer {
