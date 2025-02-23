@@ -23,6 +23,7 @@ github_email="hvbhatt@purdue.edu"
 
 resume_name='harmya_bhatt_resume.pdf'
 output_file = resume_name.split('.')[0] + '_annotated.pdf'
+tmp_file = resume_name.split('.')[0] + '_tmp.pdf'
 
 
 resume_dir = Path(__file__).parent / 'data'
@@ -36,11 +37,12 @@ if not os.path.exists(in_path):
 breakpoint()
 out_path = resume_dir / output_file
 github_username = 'harmya'
-# breakpoint()
-# path = Path(__file__).parent / 'data' / f'{github_username}.json'
-# with open(path, 'r') as f:
-#     rated_resume = json.load(f)
-#     annotate_resume(rated_resume, in_path, out_path)
+
+breakpoint()
+path = Path(__file__).parent / 'data' / f'{github_username}.json'
+with open(path, 'r') as f:
+    rated_resume = json.load(f)
+annotate_resume(rated_resume, in_path, out_path)
 
 # breakpoint()
 api_key = os.environ.get("OPENAI_API_KEY")
