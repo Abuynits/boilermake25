@@ -1,6 +1,3 @@
-from pypdf import PdfReader, PdfWriter
-from pypdf.annotations import FreeText, Popup, Text
-import json
 # pdfIn = "/Users/alexiy/Projects/Purdue/boilermake25/gh_scraper/data/ab_res.pdf"
 # pdfOut = "/Users/alexiy/Projects/Purdue/boilermake25/gh_scraper/data/ab_out.pdf"
 # Load JSON data from a file

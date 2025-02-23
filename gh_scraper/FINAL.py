@@ -1,23 +1,22 @@
 import os
 import json
 
-from _secrets import load_secrets
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import PyPDFLoader
 from resume_parsing.json_format import CSResume, CSJobPosting
 from resume_parsing.prompts import resume_prompt_template, posting_prompt_template
-from resume_parsing.parse import load_input, load_secrets
+from resume_parsing.parse import load_input
 from gh_scraper.parser import get_files
 from gh_scraper.extract_gh_files import extract_gh_files
 from gh_scraper.parsing_utils.bs_utils import extract_email_from_repo
 from gh_scraper.pdf_annotator import annotate_resume 
+from _secrets import OPENAI_API_KEY
 from path import Path
 import pdb
-import os
 from gh_scraper.readme_scraper import scrape_readme
-# pdb.disable()
+pdb.disable()
 
 
 github_email="hvbhatt@purdue.edu"
@@ -41,13 +40,13 @@ github_username = 'harmya'
 
 breakpoint()
 path = Path(__file__).parent / 'data' / f'{github_username}.json'
-with open(path, 'r') as f:
-    rated_resume = json.load(f)
-annotate_resume(rated_resume, in_path, out_path)
+# with open(path, 'r') as f:
+#     rated_resume = json.load(f)
+# annotate_resume(rated_resume, in_path, out_path)
 
 # breakpoint()
 inp = load_input(in_path)
-llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
+llm = ChatOpenAI(temperature=0, model="gpt-4o-mini", api_key=OPENAI_API_KEY)
 
 resume_parser = JsonOutputParser(pydantic_object=CSResume)
 posting_parser = JsonOutputParser(pydantic_object=CSJobPosting)
