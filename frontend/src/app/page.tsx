@@ -106,6 +106,7 @@ export default function Home() {
     } catch (_err) {
       setError('An error occurred while uploading. Please try again.');
       autoDismissNotification('error');
+      console.error(_err);
     } finally {
       setIsLoading(false);
     }

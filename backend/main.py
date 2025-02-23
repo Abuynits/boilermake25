@@ -2,7 +2,6 @@ import datetime
 import hashlib
 import json
 import os
-import sys
 import tempfile
 
 from fastapi import FastAPI, File, UploadFile, Form, Body
