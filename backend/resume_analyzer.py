@@ -126,7 +126,7 @@ def process_resume_and_posting(resume: UploadFile, job_posting: str) -> Dict[str
             resume_text = load_input(tmp.name, is_txt=resume.filename.endswith('.txt'))
             resume_result = resume_chain.invoke({"resume_text": resume_text})
         # os.unlink(temp_path)
-        resume_file = save_analysis(resume_hash, resume_result, resume, 'resumes')
+        save_analysis(resume_hash, resume_result, resume, 'resumes')
         analysis_cache.set_resume(resume_hash, resume_result)
     
     # Get job posting
@@ -134,16 +134,12 @@ def process_resume_and_posting(resume: UploadFile, job_posting: str) -> Dict[str
         posting_result = analysis_cache.get_job_posting(job_posting_hash)
     else:
         posting_result = posting_chain.invoke({"posting_text": job_posting})    
-        job_file = save_analysis(job_posting_hash, posting_result, job_posting, 'job_postings')
+        save_analysis(job_posting_hash, posting_result, job_posting, 'job_postings')
         analysis_cache.set_job_posting(job_posting_hash, posting_result)
     
     return {
         "resume_analysis": resume_result,
         "job_analysis": posting_result,
-        "saved_files": {
-            "resume": resume_file,
-            "job": job_file
-        },
         "hash": resume_hash,
         "cached": False
     }
