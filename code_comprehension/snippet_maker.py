@@ -33,8 +33,8 @@ def get_code_snippet(git_url, topic):
 
     files_json = repo_url_to_context_json(git_url, topic, char_limit=250_000)
     context = files_json_to_model_context(files_json)
-    with open("temp.txt", "w") as f:
-        f.write(context)
+    # with open("temp.txt", "w") as f:
+    #     f.write(context)
 
     prefix = f'<repo url="{git_url}">\n'
     suffix = f'</repo>\n<topic>{topic}</topic>'
