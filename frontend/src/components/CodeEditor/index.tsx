@@ -231,7 +231,6 @@ export default function CodeEditor() {
     }
 
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
     setDeleteConfirmation({
       fileName,
       x: rect.left,
