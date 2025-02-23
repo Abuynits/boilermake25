@@ -59,7 +59,6 @@ backend/output/*
 .env
 .cache/
 **/.cache/
-*.txt
 
 # Saad
 saad/out

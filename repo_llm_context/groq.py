@@ -4,13 +4,9 @@ import instructor
 from groq import Groq
 from joblib import Memory
 from pydantic import BaseModel
-
-from dotenv import load_dotenv
-
-load_dotenv()
+from secrets import GROQ_KEY
 
 memory = Memory("./.cache", verbose=0)
-GROQ_KEY = os.environ.get("GROQ_KEY")
 client = instructor.from_groq(Groq(api_key=GROQ_KEY), mode=instructor.Mode.JSON)
 
 
