@@ -33,6 +33,10 @@ export default function ResumeReport() {
         const response = await fetch('/api/grift_check', {
           method: 'POST',
           body: formData
+        }).then((response) => {
+          if (response.status === 403) {
+            router.push("/");
+          }
         });
 
         if (!response.ok) {
