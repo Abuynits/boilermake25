@@ -1,4 +1,3 @@
-import os
 import uvicorn
 
 from fastapi import (
@@ -13,7 +12,6 @@ from fastapi import (
 )
 from starlette.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import tempfile
 from uuid import uuid4
@@ -27,6 +25,7 @@ class SessionData:
     def __init__(self, resume_content: bytes, job_post: str):
         self.resume_content = resume_content
         self.job_post = job_post
+        self.annot_pdf = None
 
 
 sessions = {}
@@ -118,8 +117,17 @@ def grift_check_endpoint(session_data: SessionData = Depends(get_session)):
         out_path = grift_check(resume_pdf_path, resume_json_path)
         print(f"Generated annotated PDF at: {out_path}")
 
-        # Return the full path - we'll serve it directly in a separate endpoint
-        return {"out_path": out_path}
+        resume_pdf_tmp.close()
+        resume_json_tmp.close()
+
+        # load out_path into a byte array
+        with open(out_path, "rb") as f:
+            annot_pdf = f.read()
+
+        # add it to session
+        session_data.annot_pdf = annot_pdf
+
+        return {}
     except Exception as e:
         print(f"Error in grift check: {str(e)}")
         return {"error": str(e)}, 500
@@ -127,14 +135,16 @@ def grift_check_endpoint(session_data: SessionData = Depends(get_session)):
 
 @app.get("/api/pdf")
 async def get_pdf(session_data: SessionData = Depends(get_session)):
-    try:
-        pdf_data = session_data.resume_content
-        return Response(content=pdf_data, media_type="application/pdf")
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        print(f"Error serving PDF: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    pdf_data = session_data.resume_content
+    return Response(content=pdf_data, media_type="application/pdf")
+
+
+@app.get("/api/annotated-pdf")
+async def get_annot_pdf(session_data: SessionData = Depends(get_session)):
+    pdf_data = session_data.annot_pdf
+    if pdf_data is None:
+        raise HTTPException(status_code=404, detail="Annotated PDF not found")
+    return Response(content=pdf_data, media_type="application/pdf")
 
 
 if __name__ == "__main__":
