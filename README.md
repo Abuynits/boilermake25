@@ -1,6 +1,8 @@
-# Resume Matcher
+# Resume to Job Analysis Suite
 
-A web application that analyzes resumes and job postings using AI to help match candidates with positions. The application uses FastAPI for the backend, Next.js for the frontend, and LangChain for AI processing.
+A web application that analyzes a provided resumes and job posting using AI to better assess canidate skills and quality, identify resume factual omissions or strong points, and create a customized assesment suite, based on required skills and experience. For example, the assesment will generate code identifiation tasks for the candidate, tailored to the area the posting is for.
+
+The application uses FastAPI for the backend, Next.js for the frontend, and LangChain for AI processing.
 
 ## Prerequisites
 

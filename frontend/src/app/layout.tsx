@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Resume Matcher",
-  description: "Match your resume with job postings",
+  title: "Resume to Job Analysis Suite",
+  description: "Use a resume and a job to analyze and assess your skills and qualifications.",
 };
 
 export default function RootLayout({

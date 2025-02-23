@@ -1,10 +1,11 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import styles from './page.module.css';
 import CodeEditor from '@/components/CodeEditor';
 import AssessmentEditor from '@/components/AssessmentEditor';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function Assessment() {
   const router = useRouter();
@@ -27,22 +28,10 @@ export default function Assessment() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.breadcrumbs}>
-        <button onClick={handleHome} className={styles.breadcrumbLink}>Upload</button>
-        <span className={styles.breadcrumbSeparator}>/</span>
-        <button onClick={handleBack} className={styles.breadcrumbLink}>Resume Report</button>
-        <span className={styles.breadcrumbSeparator}>/</span>
-        <span className={styles.breadcrumbCurrent}>Assessment</span>
-      </div>
-
-      {showWarning && (
-        <div className={`${styles.notification} ${styles.errorNotification}`}>
-          Warning: Going back to the upload page will reset your progress. Click the button again to confirm.
-        </div>
-      )}
+      <Breadcrumbs items={[]} />
 
       <div className={styles.content}>
-        <h1 className={styles.title}>Assessment</h1>
+        <h1 className={styles.title}>Assessment Suite</h1>
         <p className={styles.description}>Code Editor:</p>
         
         <CodeEditor />

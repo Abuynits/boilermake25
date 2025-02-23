@@ -1,0 +1,43 @@
+.breadcrumbs {
+  @apply max-w-4xl mx-auto mb-8 flex items-center text-sm;
+}
+
+.breadcrumbItem {
+  @apply flex items-center;
+}
+
+.breadcrumbLink {
+  @apply text-blue-600 hover:text-blue-800 cursor-pointer;
+}
+
+.breadcrumbSeparator {
+  @apply text-gray-400 mx-4;
+}
+
+.breadcrumbCurrent {
+  @apply font-medium text-gray-900;
+}
+
+.breadcrumbInactive {
+  @apply text-gray-400;
+}
+
+.notification {
+  @apply fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg
+    text-sm font-medium animate-fade-in-top z-50;
+}
+
+.errorNotification {
+  @apply bg-red-50 text-red-600 border border-red-200;
+}
+
+@keyframes fadeInTop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
