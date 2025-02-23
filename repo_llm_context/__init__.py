@@ -2,14 +2,20 @@ import sys
 import time
 import json
 import shlex
-import tempfile
 import subprocess
+from hashlib import md5
 from pathlib import Path
 from joblib import Memory
 from .groq import groq_filter_list
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
 from .code_exts import code_file_extensions as lang_exts
+
+CACHE_DIR = Path("./.cache")
+CACHE_DIR.mkdir(exist_ok=True)
+
+REPOS_DIR = CACHE_DIR / "git_repos"
+REPOS_DIR.mkdir(exist_ok=True)
 
 FULL_CLONE = False
 GIT_LOG_RANK = False
@@ -128,12 +134,24 @@ def repo_to_commits(path: Path, gh_username: str, char_limit=350000):
     return out
 
 
+@memory.cache
 def repo_to_context_json(path: Path, topic: str, char_limit):
     char_limit *= 0.94  # account for xml tags overhead
 
-    cmd = shlex.split(
-        f"docker run --rm -v {path}:/repo ghcr.io/boyter/scc:master scc --by-file --format json /repo"
-    )
+    cmd = [
+        "docker",
+        "run",
+        "--rm",
+        "-v",
+        f"{path.absolute()}:/repo",
+        "ghcr.io/boyter/scc:master",
+        "scc",
+        "--by-file",
+        "--format",
+        "json",
+        "/repo",
+    ]
+
     scc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out, _ = scc.communicate()
     out = out.decode("utf-8")
@@ -241,20 +259,31 @@ def files_json_to_model_context(files_json):
 
 
 class RepoInstance:
-    def __init__(self, git_url: str):
+    def __init__(self, git_url: str, shallow=True):
         self.git_url = git_url
+        self.shallow = shallow
 
-        # make temporary directory
-        self.tmp_dir = tempfile.TemporaryDirectory()
-        self.path = Path(self.tmp_dir.name)
+        shallow_path = REPOS_DIR / (md5(git_url.encode()).hexdigest())
+        deep_path = REPOS_DIR / (md5(git_url.encode()).hexdigest() + "-deep")
+
+        if deep_path.exists():
+            self.shallow = False
+            self.path = deep_path
+        elif not shallow:
+            self.path = deep_path
+        else:
+            self.path = shallow_path
 
     def open(self):
+        if self.path.exists():
+            return
+
         start = time.time()
         print(f"cloning {self.git_url} to {self.path}", file=sys.stderr)
-        if FULL_CLONE:
-            cmd = shlex.split("git clone")
-        else:
+        if self.shallow:
             cmd = shlex.split("git clone --depth 1")
+        else:
+            cmd = shlex.split("git clone")
         cmd.append(self.git_url)
         cmd.append(str(self.path))
         # git = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -266,10 +295,9 @@ class RepoInstance:
         print(f"cloned in {took:.2f}s", file=sys.stderr)
 
     def close(self):
-        self.tmp_dir.cleanup()
+        pass
 
 
-@memory.cache
 def repo_url_to_context_json(git_url: str, topic: str, char_limit):
     repo = RepoInstance(git_url)
     repo.open()
@@ -279,7 +307,7 @@ def repo_url_to_context_json(git_url: str, topic: str, char_limit):
 
 
 def repo_url_to_commits(git_url: str, gh_username: str):
-    repo = RepoInstance(git_url)
+    repo = RepoInstance(git_url, shallow=False)
     repo.open()
     out = repo_to_commits(repo.path, gh_username)
     repo.close()

@@ -5,9 +5,13 @@ A web application that analyzes resumes and job postings using AI to help match 
 ## Prerequisites
 
 - Python 3.8 or higher
+- [uv package manager](https://docs.astral.sh/uv/getting-started/installation/)
 - Node.js 14 or higher
-- npm or yarn
+- npm
 - OpenAI API key
+- Groq API Key
+- Hyperbolic API Key
+- GitHub Token
 
 ## Installation
 
@@ -19,12 +23,8 @@ cd boilermake25
 
 ### 2. Set Up Python Environment
 ```bash
-# Create and activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows, use .venv\Scripts\activate
-
-# Install Python dependencies
-pip install -r requirements.txt
+uv sync
+source .venv/bin/activate
 ```
 
 ### 3. Set Up Frontend
@@ -37,11 +37,12 @@ npm install
 ```
 
 ### 4. Configure OpenAI API Key
-Create a `config/secrets.json` file in the root directory with your OpenAI API key:
-```json
-{
-    "OPENAI_API_KEY": "your-api-key-here"
-}
+Create a `_secrets.py` file in the repository root, and add these keys:
+```py
+GROQ_KEY="your_groq_key"
+GITHUB_TOKEN="your_github_token"
+OPENAI_API_KEY="your_openai_api_key"
+HYPERBOLIC_API_KEY="your_hyperbolic_api_key"
 ```
 
 ## Running the Application
@@ -49,9 +50,7 @@ Create a `config/secrets.json` file in the root directory with your OpenAI API k
 ### 1. Start the Backend Server
 In one terminal:
 ```bash
-# Make sure you're in the project root and virtual environment is activated
-cd backend
-python main.py
+python -m backend.main
 ```
 The backend will run on `http://localhost:8000`
 
@@ -70,6 +69,22 @@ The frontend will run on `http://localhost:3000`
 3. Paste the job posting text in the provided text area
 4. Click Submit to analyze
 5. View the analysis results below the form
+
+
+## Running any Python file
+
+Say you wanna run `folder_name/file_name.py`. Do so from the repository root:
+```bash
+$ pwd
+/path/to/boilermake25
+$ source .venv/bin/activate # make sure venv is activated
+$ python -m folder_name.file_name
+
+# for example
+$ python -m code_comprehension <github url> "<topics>"
+```
+
+You don't need to do a .something after code_comprehension because that folder has a `__main__.py` file.
 
 ## Output
 

@@ -1,1 +1,0 @@
-{"description": null, "readme": "# PSPL_CMS_AVIONICS_COTS_FSW\n\n## Dependencies\n- Docker\n\n## Build Steps\n```\n./build.sh\n```\n", "prev_commits": ["simplify cmake file"], "title": "PSPL_CMS_AVIONICS_COTS_FSW", "owner": "Purdue-Space-Program", "commits": 1}

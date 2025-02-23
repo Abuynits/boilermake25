@@ -1,6 +1,7 @@
 import os
 import json
 
+from _secrets import load_secrets
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
@@ -16,23 +17,32 @@ from path import Path
 import pdb
 import os
 from gh_scraper.readme_scraper import scrape_readme
-pdb.disable()
+# pdb.disable()
 
-github_email="sagarreddypatil@gmail.com"
 
-resume_name='sagar_resume.pdf'
+github_email="hvbhatt@purdue.edu"
+
+resume_name='harmya_bhatt_resume.pdf'
 output_file = resume_name.split('.')[0] + '_annotated.pdf'
 
 
 resume_dir = Path(__file__).parent / 'data'
+if not os.path.exists(resume_dir):
+    os.mkdir(resume_dir)
+
 in_path = resume_dir / resume_name
 if not os.path.exists(in_path):
     print(f"resume {in_path} does not exist")
     exit(1)
-
+breakpoint()
 out_path = resume_dir / output_file
+github_username = 'harmya'
+# breakpoint()
+# path = Path(__file__).parent / 'data' / f'{github_username}.json'
+# with open(path, 'r') as f:
+#     rated_resume = json.load(f)
+#     annotate_resume(rated_resume, in_path, out_path)
 
-api_key = os.environ.get("OPENAI_API_KEY")
 # breakpoint()
 inp = load_input(in_path)
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
@@ -80,4 +90,3 @@ else:
     with open(path, 'r') as f:
         rated_resume = json.load(f)
     annotate_resume(rated_resume, in_path, out_path)
-

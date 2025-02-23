@@ -59,4 +59,8 @@ backend/output/*
 .env
 .cache/
 **/.cache/
-*.txt
+
+# Saad
+saad/out
+saad/secrets.py
+_secrets.py

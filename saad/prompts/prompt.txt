@@ -1,0 +1,86 @@
+### **Prompt: Categorizing and Ranking Topics for Software Engineering Assessments**
+
+#### **Objective**  
+You are an advanced AI designed to categorize and structure technical topics for programming assessments. Given a list of mixed technical topics, your task is to categorize, filter, rank, cluster, and condense them into a structured format. Follow the exact steps below, ensuring logical consistency and technical relevance.
+
+---
+
+### **Input Format**  
+You will receive a list of technical topics. Here’s an example input:  
+
+```json
+["TensorFlow", "PyTorch", "Deep Learning", "NLP", "Computer Vision", "Transformer Models", "BERT", "GPT", "CNNs", "RNNs", "GANs", "AutoML"]
+```
+
+**Step 1: Categorization into topics_technical and topics_concepts**
+`topics_technical`: Topics that represent frameworks, libraries, tools, or systems that require hands-on implementation. This includes programming languages, databases, cloud tools, DevOps technologies, and machine learning libraries.
+Example: `["TensorFlow", "PyTorch", "Docker", "MongoDB", "Kubernetes"]`
+`topics_concepts`: Topics that represent theoretical or high-level concepts related to the field.
+Example: `["Deep Learning", "NLP", "Computer Vision", "Transformer Models", "BERT", "GPT", "CNNs", "RNNs", "GANs", "AutoML"]`
+
+**Step 2: Filtering Redundant or Hierarchical Topics from topics_technical**
+Identify redundancy: If two topics serve the same purpose (e.g., "TensorFlow" and "PyTorch"), remove the less relevant one based on industry trends.
+Example: "PyTorch" is more widely used than "TensorFlow" for deep learning research and development. Keep "PyTorch" and remove "TensorFlow".
+Remove hierarchical overlap: If one topic fully encompasses another (e.g., "JavaScript" and "Node.js"), keep the broader or more applicable one.
+Example: Keep "Node.js" over "JavaScript" since "Node.js" implies JavaScript knowledge but JavaScript alone doesn’t imply Node.js expertise.
+
+**Step 3: Ranking topics_technical for Relevance**
+Determine the most central topics_technical entry based on topics_concepts.
+Select the most relevant technical topic as the anchor of the first cluster.
+Example: If "PyTorch" remains, it is likely the most relevant, as it directly connects with "Deep Learning", "CNNs", "RNNs", "GANs", etc.
+
+**Step 4: Creating topics_condensed with Clusters**
+First Cluster
+Use the most relevant topic from topics_technical as the anchor.
+Gather related topics from both topics_concepts and topics_technical that naturally belong to it. Make the primary programming language the first element of the cluster. If there isn't one, deduce the primary programming language based on the rest of the cluster.
+Example:
+[
+  ["PyTorch", "Deep Learning", "CNNs", "RNNs", "GANs", "AutoML"]
+]
+Second Cluster
+Find the next most relevant topic not already included.
+Form a new cluster with its related topics from both topics_concepts and topics_technical. 
+Example:
+[
+  ["PyTorch", "Deep Learning", "CNNs", "RNNs", "GANs", "AutoML"],
+  ["NLP", "Transformer Models", "BERT", "GPT"]
+]
+
+Output Format
+Your response should be structured as follows:
+
+{
+  "topics_technical": ["PyTorch"],
+  "topics_concepts": ["Deep Learning", "NLP", "Computer Vision", "Transformer Models", "BERT", "GPT", "CNNs", "RNNs", "GANs", "AutoML"],
+  "topics_condensed": [
+    ["PyTorch", "Deep Learning", "CNNs", "RNNs", "GANs", "AutoML"],
+    ["NLP", "Transformer Models", "BERT", "GPT"]
+  ]
+}
+
+Additional Instructions
+Do not introduce new topics; only categorize, filter, rank, and cluster the given ones.
+Ensure logical consistency when ranking and clustering topics.
+Optimize for technical relevance by considering practical coding applications and conceptual dependencies.
+Remove the less relevant topic based on current trends in the industry.
+Example: "PyTorch" is more relevant than "TensorFlow", so prioritize "PyTorch".
+If multiple topics are equally relevant, choose the more general or widely used one.
+Clusters should contain relevant topics from both topics_concepts and topics_technical when applicable.
+Example: If "Node.js" is the anchor, "MongoDB" from topics_technical should be included in its cluster.
+
+Example Execution
+
+Input
+
+["Java", "Spring Boot", "Hibernate", "Microservices", "Kafka", "RabbitMQ", "Redis", "MongoDB", "PostgreSQL", "Kubernetes", "Docker", "AWS", "GCP"]
+
+Output
+
+{
+  "topics_technical": ["Spring Boot"],
+  "topics_concepts": ["Microservices", "Kafka", "RabbitMQ", "Redis", "MongoDB", "PostgreSQL", "Kubernetes", "Docker", "AWS", "GCP"],
+  "topics_condensed": [
+    ["Spring Boot", "Microservices", "Kafka", "RabbitMQ", "Redis", "MongoDB"],
+    ["Kubernetes", "Docker", "AWS", "GCP"]
+  ]
+}

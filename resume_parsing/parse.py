@@ -7,19 +7,9 @@ from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import PyPDFLoader
 from resume_parsing.json_format import CSResume, CSJobPosting
 from .prompts import resume_prompt_template, posting_prompt_template
+from _secrets import OPENAI_API_KEY
 
 ############################# UTIL FUNCTIONS ############################# 
-def load_secrets():
-    secrets_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'secrets.json')
-    try:
-        with open(secrets_path, 'r') as f:
-            secrets = json.load(f)
-            os.environ['OPENAI_API_KEY'] = secrets['OPENAI_API_KEY']
-            return secrets
-    except FileNotFoundError:
-        raise FileNotFoundError(f"secrets.json not found at {secrets_path}. Please create it with your OpenAI API key.")
-    except json.JSONDecodeError:
-        raise ValueError("secrets.json is not a valid JSON file")
 
 def load_input(file_path: str, is_txt: bool=False) -> str:
     if file_path.lower().endswith(".pdf") and not is_txt:
@@ -39,7 +29,6 @@ def load_input(file_path: str, is_txt: bool=False) -> str:
 resume_parser = JsonOutputParser(pydantic_object=CSResume)
 posting_parser = JsonOutputParser(pydantic_object=CSJobPosting)
 
-secrets = load_secrets()
 resume_prompt = PromptTemplate(
     input_variables=["resume_text"],
     partial_variables={"format_instructions": resume_parser.get_format_instructions()},
@@ -53,7 +42,7 @@ posting_prompt = PromptTemplate(
 )
 ################################################################ 
 
-llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
+llm = ChatOpenAI(temperature=0, model="gpt-4o-mini", api_key=OPENAI_API_KEY)
 
 # Build the chain using the pipe syntax.
 resume_chain = resume_prompt | llm | resume_parser
