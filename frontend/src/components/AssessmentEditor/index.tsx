@@ -64,7 +64,7 @@ export default function AssessmentEditor() {
   };
 
   return (
-    <div className="flex flex-col w-full gap-4 p-4">
+    <div className="flex flex-col w-full gap-4">
       {score !== null && (
         <div className="bg-green-500 p-2 px-4 text-bold text-right text-2xl font-bold">Score: {score * 100}/100</div>
       )}
