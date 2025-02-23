@@ -1,13 +1,15 @@
+import sys
 import requests
 import json
 import random
 import openai
 import base64
 from rapidfuzz import fuzz
+from importlib.resources import read_text
 
-from utils import extract_valid_json
-from heuristics import valid_extensions
-from heuristics import language_build_files
+from .utils import extract_valid_json
+from .heuristics import valid_extensions
+from .heuristics import language_build_files
 
 from secrets import GITHUB_TOKEN
 from secrets import HYPERBOLIC_API_KEY
@@ -27,8 +29,7 @@ def generate_query(language, build_files):
                 }}
               }}
         '''
-    with open('query.graphql', 'r') as f:
-        query = f.read()
+    query = read_text(sys.modules[__name__], "query.graphql")
     query = query.replace("{programming_language}", language).replace("{build_file_queries}", build_file_queries)
     return query
 

@@ -64,3 +64,4 @@ backend/output/*
 # Saad
 saad/out
 saad/secrets.py
+secrets.py

@@ -1,13 +1,14 @@
 import openai
-import topic_examples
+from . import topic_examples
+from . import prompts
+from importlib.resources import read_text
 from secrets import HYPERBOLIC_API_KEY
 
 topics = topic_examples.topics
 
 system_content = None
 user_content = str(topics[4])
-with open('prompts/prompt.txt', 'r') as f:
-    system_content = f.read()
+system_content = read_text(prompts, 'prompt.txt')
 
 client = openai.OpenAI(
     api_key=HYPERBOLIC_API_KEY,
