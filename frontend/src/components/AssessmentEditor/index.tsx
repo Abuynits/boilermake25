@@ -16,6 +16,7 @@ export default function AssessmentEditor() {
   const [userAnswer, setUserAnswer] = useState("");
   const [codeContent, setCodeContent] = useState("// Code will appear here");
   const [editorKey, setEditorKey] = useState(0);
+  const [score, setScore] = useState<number | null>(null);
 
   // Force editor to reinitialize after a delay
   useEffect(() => {
@@ -58,12 +59,15 @@ export default function AssessmentEditor() {
         return response.json();
       })
       .then((data) => {
-        alert(`Score: ${data.score}`);
+        setScore(data.score);
       });
   };
 
   return (
     <div className="flex flex-col w-full gap-4 p-4">
+      {score !== null && (
+        <div className="bg-green-500 p-2 px-4 text-bold text-right text-2xl font-bold">Score: {score * 100}/100</div>
+      )}
       <div className="flex gap-4 h-[500px]">
         {/* Left Panel - Read Only Code */}
         <div className="flex-1 flex flex-col">
