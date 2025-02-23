@@ -37,7 +37,7 @@ npm install
 ```
 
 ### 4. Configure OpenAI API Key
-Create a `secrets.py` file in the repository root, and add these keys:
+Create a `_secrets.py` file in the repository root, and add these keys:
 ```py
 GROQ_KEY="your_groq_key"
 GITHUB_TOKEN="your_github_token"
