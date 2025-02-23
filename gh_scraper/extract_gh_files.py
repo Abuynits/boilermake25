@@ -12,7 +12,7 @@ from _secrets import OPENAI_API_KEY as api_key
 data_name = 'example_res.json'
 
 openai.api_key = api_key
-client = OpenAI()
+client = OpenAI(api_key=api_key)
 
 def prompt_gpt(prompt, sys_prompt):
 
