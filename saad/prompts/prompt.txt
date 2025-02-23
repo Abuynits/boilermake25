@@ -59,6 +59,7 @@ Your response should be structured as follows:
 }
 
 Additional Instructions
+Return only with the expected output in json format. Do not return anything else. You are to follow this rule very strictly.
 Do not introduce new topics; only categorize, filter, rank, and cluster the given ones.
 Ensure logical consistency when ranking and clustering topics.
 Optimize for technical relevance by considering practical coding applications and conceptual dependencies.

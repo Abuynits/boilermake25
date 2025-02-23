@@ -19,6 +19,7 @@ from uuid import uuid4
 
 from .resume_analyzer import process_resume_and_posting
 from .code_executors import execute_code
+from .pr_assignment import generate_pr_assignment
 from gh_scraper.FINAL import grift_check
 from code_comprehension.snippet_maker import get_code_snippet
 
@@ -167,6 +168,16 @@ def post_comprehension_problem(request: ComprehensionProblemRequest):
     print(request.answer)
     return {"score": 0.9}
 
+@app.get("/api/pr_assessment")
+def get_pr_assessment():
+    exercises = generate_pr_assignment()
+    return {
+        exercises
+    }
+
+@app.post("/api/pr_assessment")
+def post_pr_assessment():
+    return {"score": 0.9}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
