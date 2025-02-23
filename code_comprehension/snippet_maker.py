@@ -4,7 +4,7 @@ from groq import Groq
 from pydantic import BaseModel
 from importlib.resources import read_text
 from repo_llm_context import repo_url_to_context_json, files_json_to_model_context
-from secrets import GROQ_KEY
+from _secrets import GROQ_KEY
 
 client = Groq(api_key=GROQ_KEY)
 # client = instructor.from_groq(client, mode=instructor.Mode.JSON)

@@ -11,8 +11,8 @@ from .utils import extract_valid_json
 from .heuristics import valid_extensions
 from .heuristics import language_build_files
 
-from secrets import GITHUB_TOKEN
-from secrets import HYPERBOLIC_API_KEY
+from _secrets import GITHUB_TOKEN
+from _secrets import HYPERBOLIC_API_KEY
 
 GRAPHQL_URL = "https://api.github.com/graphql"
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
