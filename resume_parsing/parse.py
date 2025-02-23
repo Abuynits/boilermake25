@@ -11,17 +11,11 @@ from _secrets import OPENAI_API_KEY
 
 ############################# UTIL FUNCTIONS ############################# 
 
-def load_input(file_path: str, is_txt: bool=False) -> str:
-    if file_path.lower().endswith(".pdf") and not is_txt:
-        loader = PyPDFLoader(file_path)
-        documents = loader.load()
-        # Join content from all pages
-        return "\n".join(doc.page_content for doc in documents)
-    elif file_path.lower().endswith(".txt"):
-        with open(file_path, "r", encoding="utf-8") as f:
-            return f.read()
-    else:
-        raise ValueError("Unsupported file format. Only PDF and TXT are supported.")
+def load_input(file_path: str) -> str:
+    loader = PyPDFLoader(file_path)
+    documents = loader.load()
+    # Join content from all pages
+    return "\n".join(doc.page_content for doc in documents)
 
 
 ############################# TEMPLATE ############################# 

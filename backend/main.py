@@ -1,12 +1,20 @@
-from fastapi import FastAPI, File, Response, UploadFile, Form
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends, Request, HTTPException, FastAPI, File, Response, UploadFile, Form
 from starlette.concurrency import run_in_threadpool
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from session import cookie, backend, SessionData
 from uuid import uuid4
 
 from .code_executors import execute_code
 from .resume_analyzer import process_resume_and_posting
+
+
+class SessionData:
+    def __init__(self, resume_content: bytes, job_post: str):
+        self.resume_content = resume_content
+        self.job_post = job_post
+
+
+sessions = {}
 
 
 class CodeRequest(BaseModel):
@@ -31,18 +39,25 @@ async def root():
 
 @app.post("/api/analyze")
 async def analyze_resume(resume: UploadFile = File(...), job_posting: str = Form(...)):
-    # creates a session
-    res_json, resume_content = await run_in_threadpool(
-        process_resume_and_posting, resume, job_posting
-    )
+    resume_content = await resume.read()
+    await run_in_threadpool(process_resume_and_posting, resume_content, job_posting)
 
-    res = Response(content=res_json)
-    session = uuid4()
-    data = SessionData(resume_text=resume_content, job_posting_text=job_posting)
-    await backend.create(session, data)
-    cookie.attach_to_response(res, session)
+    res = Response()
+    session = str(uuid4())
+    sessions[session] = SessionData(resume_content, job_posting)
+    res.set_cookie("session", str(session), httponly=True, secure=False, samesite="strict")
 
     return res
+
+
+async def get_session(request: Request):  # Rename and add type hint
+    session = request.cookies.get("session")
+    if session is None:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    session_data = sessions.get(session)
+    if session_data is None:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return session_data
 
 
 @app.post("/api/execute-code")
@@ -52,11 +67,11 @@ def execute_code_endpoint(request: CodeRequest):
 
 
 @app.get("/api/get-analysis")
-def get_analysis():
-    # cached_data = analysis_cache.get_resume(hash_key)
-    if not cached_data:
-        return {"error": "Analysis not found"}, 404
-    return cached_data
+def get_analysis(session_data: SessionData = Depends(get_session)):
+    resume_content = session_data.resume_content
+    job_posting = session_data.job_post
+
+    return process_resume_and_posting(resume_content, job_posting)
 
 
 if __name__ == "__main__":

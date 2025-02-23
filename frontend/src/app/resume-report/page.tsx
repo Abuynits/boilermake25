@@ -1,20 +1,34 @@
-'use client';
+"use client";
 
-import { useRouter, usePathname } from 'next/navigation';
-import styles from './page.module.css';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import { useRouter, usePathname } from "next/navigation";
+import styles from "./page.module.css";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { useEffect, useState } from "react";
 
 export default function ResumeReport() {
   const router = useRouter();
-  const pathname = usePathname();
-  const hash = pathname.split('/').pop();
+
+  const [report, setReport] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/get-analysis")
+      .then((response) => {
+        if (response.status === 403) {
+          router.push("/");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setReport(data);
+      });
+  }, []);
 
   const handleNext = () => {
-    router.push(`/assessment/${hash}`);
+    router.push(`/assessment`);
   };
 
   const handleBack = () => {
-    router.push('/');
+    router.push("/");
   };
 
   return (
@@ -23,8 +37,8 @@ export default function ResumeReport() {
 
       <div className={styles.content}>
         <h1 className={styles.title}>Resume Report</h1>
-        <p className={styles.description}>Resume analysis details will be displayed here.</p>
-        
+        <p className={styles.description}>{JSON.stringify(report)}</p>
+
         <div className={styles.navigation}>
           <button onClick={handleBack} className={styles.backButton}>
             Back to Upload

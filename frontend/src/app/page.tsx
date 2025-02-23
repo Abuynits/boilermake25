@@ -88,7 +88,7 @@ export default function Home() {
       formData.append('resume', resume);
       formData.append('job_posting', jobPosting);
       
-      const response = await fetch('http://localhost:8000/api/analyze', {
+      const response = await fetch('/api/analyze', {
         method: 'POST',
         body: formData
       });
@@ -97,11 +97,10 @@ export default function Home() {
         throw new Error('Failed to analyze resume');
       }
       
-      const data = await response.json();
       setSuccess('Analysis complete! Redirecting to report...');
       // Short delay to show the success message before redirecting
       setTimeout(() => {
-        router.push(`/resume-report/${data.hash}`);
+        router.push(`/resume-report`);
       }, 1000);
     } catch (_err) {
       setError('An error occurred while uploading. Please try again.');

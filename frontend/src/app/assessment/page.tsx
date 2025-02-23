@@ -9,12 +9,10 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function Assessment() {
   const router = useRouter();
-  const pathname = usePathname();
-  const hash = pathname.split('/').pop();
   const [showWarning, setShowWarning] = useState(false);
 
   const handleBack = () => {
-    router.push(`/resume-report/${hash}`);
+    router.push(`/resume-report`);
   };
 
   const handleHome = () => {
