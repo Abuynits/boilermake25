@@ -4,7 +4,7 @@ import json
 import os
 import tempfile
 from typing import Dict, Tuple, Any, Union 
-from fastapi import UploadFile
+from starlette.datastructures import UploadFile
 
 from resume_parsing.parse import load_input, resume_chain, posting_chain
 
@@ -105,12 +105,12 @@ def save_analysis(hash_key: str, analysis_result: Dict, content: Union[UploadFil
     
     return analysis_file
 
-async def process_resume_and_posting(resume: UploadFile, job_posting: str) -> Dict[str, Any]:
+def process_resume_and_posting(resume: UploadFile, job_posting: str) -> Dict[str, Any]:
     """Process resume and job posting and return analysis results."""
 
     # Generate a unique hash for this combination of resume and job posting.
-    resume_content = await resume.read()
-    await resume.seek(0) # Reset file pointer for later use
+    resume_content = resume.file.read()
+    resume.file.seek(0) # Reset file pointer for later use
     resume_hash = generate_hash(resume_content)
 
     job_posting_hash = generate_hash(job_posting.encode('utf-8'))
