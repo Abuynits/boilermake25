@@ -1,21 +1,16 @@
 import sys
-from . import RepoInstance, repo_to_context
+import json
+from . import repo_url_to_context_json, files_json_to_model_context
 
 if __name__ == "__main__":
     git_url = sys.argv[1]
+    topic = sys.argv[2]
 
     import time
     start = time.time()
-    print(f"Cloning {git_url}", file=sys.stderr)
-    repo = RepoInstance(git_url)
-    repo.open()
-    clone_time = time.time() - start
-    print(f"Took {clone_time:.2f}s to clone repo", file=sys.stderr)
+    out = repo_url_to_context_json(git_url, topic, char_limit=300_000)
+    took = time.time() - start
+    print(f"Took {took:.2f}s to process repo", file=sys.stderr)
 
-    start = time.time()
-    out = repo_to_context(repo.path)
-    repo.close()
-    proc_time = time.time() - start
-    print(f"Took {proc_time:.2f}s to process repo", file=sys.stderr)
-
+    out = files_json_to_model_context(out)
     print(out)

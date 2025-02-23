@@ -57,3 +57,7 @@ config/secrets.json
 *.log
 
 .env
+.cache/
+**/.cache/
+
+*.txt
