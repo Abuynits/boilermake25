@@ -40,14 +40,14 @@ posting_prompt = PromptTemplate(
     partial_variables={"format_instructions": posting_parser.get_format_instructions()},
     template=posting_prompt_template,
 )
-# ################################################################ 
+################################################################ 
 
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini", api_key=OPENAI_API_KEY)
 
-# # Build the chain using the pipe syntax.
+# Build the chain using the pipe syntax.
 resume_chain = resume_prompt | llm | resume_parser
 posting_chain = posting_prompt | llm | posting_parser
 
-# # Initialize the chains for use by the API
+# Initialize the chains for use by the API
 resume_chain = resume_prompt | llm | resume_parser
 posting_chain = posting_prompt | llm | posting_parser
