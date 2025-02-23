@@ -1,8 +1,4 @@
-import hashlib
-import os
 import tempfile
-from typing import Dict, Any
-from starlette.datastructures import UploadFile
 from resume_parsing.parse import load_input, resume_chain, posting_chain
 from joblib import Memory
 

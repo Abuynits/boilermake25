@@ -23,6 +23,39 @@ export default function ResumeReport() {
       });
   }, []);
 
+  const [pdfPath, setPdfPath] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const checkGrift = async () => {
+      try {
+        const formData = new FormData();
+        const response = await fetch('/api/grift_check', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get annotated PDF');
+        }
+
+        const data = await response.json();
+        if (data.out_path) {
+          setPdfPath(data.out_path);
+        } else {
+          throw new Error('No PDF path returned');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to get annotated PDF');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+      checkGrift();
+  }, []);
+
   const handleNext = () => {
     router.push(`/assessment`);
   };
@@ -37,8 +70,26 @@ export default function ResumeReport() {
 
       <div className={styles.content}>
         <h1 className={styles.title}>Resume Report</h1>
-        <p className={styles.description}>{JSON.stringify(report)}</p>
-
+        
+        {isLoading ? (
+          <div className={styles.loading}>Loading annotated resume...</div>
+        ) : error ? (
+          <div className={styles.error}>{error}</div>
+        ) : pdfPath ? (
+          <div className={styles.analysis}>
+            <div className={styles.pdfContainer}>
+              <h2>Annotated Resume Analysis</h2>
+              <iframe 
+                src={`http://localhost:8000/api/pdf`}
+                className={styles.pdfViewer}
+                title="Annotated Resume"
+              />
+            </div>
+          </div>
+        ) : (
+          <p className={styles.description}>No annotated resume available.</p>
+        )}
+        
         <div className={styles.navigation}>
           <button onClick={handleBack} className={styles.backButton}>
             Back to Upload
