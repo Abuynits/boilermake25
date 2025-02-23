@@ -8,13 +8,14 @@ if __name__ == "__main__":
     topic = sys.argv[2]
 
     start = time.time()
-    thoughts, rel_path, code, explaination = get_code_snippet(git_url, topic)
+    # thoughts, rel_path, code, explaination = get_code_snippet(git_url, topic)
+    get_code_snippet(git_url, topic)
     took = time.time() - start
 
     print(f"Took {took:.2f}s to process repo", file=sys.stderr)
-    print("=== Thoughts ===")
-    print(thoughts)
-    print(f"\n=== {rel_path} ===")
-    print(code)
-    print("\n=== Explaination ===")
-    print(explaination)
+    # print("=== Thoughts ===")
+    # print(thoughts)
+    # print(f"\n=== {rel_path} ===")
+    # print(code)
+    # print("\n=== Explaination ===")
+    # print(explaination)

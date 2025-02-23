@@ -269,6 +269,7 @@ class RepoInstance:
         self.tmp_dir.cleanup()
 
 
+@memory.cache
 def repo_url_to_context_json(git_url: str, topic: str, char_limit):
     repo = RepoInstance(git_url)
     repo.open()
