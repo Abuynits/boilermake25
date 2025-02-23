@@ -1,29 +1,65 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 // Dynamically import Monaco Editor
-const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
 
 export default function AssessmentEditor() {
-  const [codeFilePath, setCodeFilePath] = useState('');
-  const [repoName, setRepoName] = useState('');
-  const [userAnswer, setUserAnswer] = useState('');
-  const [codeContent, setCodeContent] = useState('// Code will appear here');
+  // const router = useRouter();
+  const [codeFilePath, setCodeFilePath] = useState("");
+  const [repoName, setRepoName] = useState("");
+  const [userAnswer, setUserAnswer] = useState("");
+  const [codeContent, setCodeContent] = useState("// Code will appear here");
   const [editorKey, setEditorKey] = useState(0);
 
   // Force editor to reinitialize after a delay
   useEffect(() => {
     const timer = setTimeout(() => {
-      setEditorKey(prev => prev + 1);
+      setEditorKey((prev) => prev + 1);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    fetch("/api/comprehension-problem")
+      .then((response) => {
+        if (response.status === 403) {
+          // router.push("/");
+          window.location.href = "/";
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRepoName(data.repo);
+        setCodeFilePath(data.path);
+        setCodeContent(data.snippet);
+      });
+  }, []);
+
   const handleScore = async () => {
-    // TODO: Implement scoring logic
-    console.log('Scoring submission...');
+    const answer = userAnswer.trim();
+    fetch("/api/comprehension-problem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ answer }),
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          // router.push("/");
+          window.location.href = "/";
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(`Score: ${data.score}`);
+      });
   };
 
   return (
@@ -42,23 +78,24 @@ export default function AssessmentEditor() {
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
                 fontSize: 14,
-                theme: 'vs-dark'
+                theme: "vs-dark",
               }}
               className="min-h-[200px]"
               onMount={(editor, monaco) => {
-                monaco.editor.setTheme('vs-dark');
+                monaco.editor.setTheme("vs-dark");
                 editor.updateOptions({
-                  theme: 'vs-dark'
+                  theme: "vs-dark",
                 });
               }}
             />
           </div>
           <div className="mt-4 flex flex-col gap-2">
             <div className="text-gray-900 border border-gray-200 rounded-md px-4 py-2">
-              Code file path {codeFilePath ? `(${codeFilePath})` : '(not specified)'}
+              Code file path{" "}
+              {codeFilePath ? `(${codeFilePath})` : "(not specified)"}
             </div>
             <div className="text-gray-900 border border-gray-200 rounded-md px-4 py-2">
-              Repo name {repoName ? `(${repoName})` : '(not specified)'}
+              Repo name {repoName ? `(${repoName})` : "(not specified)"}
             </div>
           </div>
         </div>
@@ -70,11 +107,11 @@ export default function AssessmentEditor() {
             placeholder="Enter your answer here..."
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
-            style={{ height: 'calc(100% - 48px)' }}
+            style={{ height: "calc(100% - 48px)" }}
           />
         </div>
       </div>
-      
+
       {/* Score Button - Below both panels */}
       <div className="flex justify-end mt-2">
         <button

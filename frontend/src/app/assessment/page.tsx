@@ -30,11 +30,11 @@ export default function Assessment() {
 
       <div className={styles.content}>
         <h1 className={styles.title}>Assessment Suite</h1>
-        <p className={styles.description}>Code Editor:</p>
+        <h2 className={styles.description}>Code Editor</h2>
         
         <CodeEditor />
 
-        <p className={styles.description}>Code Review:</p>
+        <h2 className={styles.description} style={{marginTop: "2rem", marginBottom: "0px"}}>Code Review</h2>
 
         <AssessmentEditor />
 

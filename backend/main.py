@@ -108,7 +108,9 @@ def grift_check_endpoint(session_data: SessionData = Depends(get_session)):
         resume_pdf_tmp.flush()
         resume_pdf_path = resume_pdf_tmp.name
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as resume_json_tmp:
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=".json"
+        ) as resume_json_tmp:
             resume_json_tmp.write(json.dumps(resume_json).encode())
             resume_json_tmp.flush()
             resume_json_path = resume_json_tmp.name
@@ -118,9 +120,9 @@ def grift_check_endpoint(session_data: SessionData = Depends(get_session)):
             out_path = grift_check(resume_pdf_path, resume_json_path)
             print(f"Generated annotated PDF at: {out_path}")
 
-    # load out_path into a byte array
-    with open(out_path, "rb") as f:
-        annot_pdf = f.read()
+            # load out_path into a byte array
+            with open(out_path, "rb") as f:
+                annot_pdf = f.read()
 
     # add it to session
     session_data.annot_pdf = annot_pdf
@@ -140,6 +142,25 @@ def get_annot_pdf(session_data: SessionData = Depends(get_session)):
     if pdf_data is None:
         raise HTTPException(status_code=404, detail="Annotated PDF not found")
     return Response(content=pdf_data, media_type="application/pdf")
+
+
+@app.get("/api/comprehension-problem")
+def get_comprehension_problem():
+    return {
+        "repo": "https://github.com/rust-lang/rust",
+        "path": "src/whatever.rs",
+        "snippet": 'fn main() {\n    println!("Hello, world!");\n}',
+    }
+
+
+class ComprehensionProblemRequest(BaseModel):
+    answer: str
+
+
+@app.post("/api/comprehension-problem")
+def post_comprehension_problem(request: ComprehensionProblemRequest):
+    print(request.answer)
+    return {"score": 0.9}
 
 
 if __name__ == "__main__":

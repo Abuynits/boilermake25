@@ -38,12 +38,6 @@ export default function ResumeReport() {
             router.push("/");
           }
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to get annotated PDF');
-        }
-
-        await response.json();
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to get annotated PDF');
       } finally {
