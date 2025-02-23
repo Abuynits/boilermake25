@@ -55,3 +55,4 @@ Icon
 # Project specific
 config/secrets.json
 *.log
+backend/output/*
