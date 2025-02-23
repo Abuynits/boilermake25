@@ -50,9 +50,7 @@ HYPERBOLIC_API_KEY="your_hyperbolic_api_key"
 ### 1. Start the Backend Server
 In one terminal:
 ```bash
-# Make sure you're in the project root and virtual environment is activated
-cd backend
-python main.py
+python -m backend.main
 ```
 The backend will run on `http://localhost:8000`
 
