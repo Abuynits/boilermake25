@@ -20,6 +20,7 @@ from uuid import uuid4
 from .resume_analyzer import process_resume_and_posting
 from .code_executors import execute_code
 from gh_scraper.FINAL import grift_check
+from code_comprehension.snippet_maker import get_code_snippet
 
 
 class SessionData:
@@ -146,10 +147,14 @@ def get_annot_pdf(session_data: SessionData = Depends(get_session)):
 
 @app.get("/api/comprehension-problem")
 def get_comprehension_problem():
+    repo_url = "https://github.com/aws-samples/automated-datastore-discovery-with-aws-glue.git"
+    topic = "AWS Data Pipelines"
+
+    result = get_code_snippet(repo_url, topic)
     return {
-        "repo": "https://github.com/rust-lang/rust",
-        "path": "src/whatever.rs",
-        "snippet": 'fn main() {\n    println!("Hello, world!");\n}',
+        "repo": repo_url,
+        "path": result["path"],
+        "snippet": result["snippet"],
     }
 
 

@@ -105,6 +105,8 @@ def get_code_snippet(git_url, topic, seed=1):
             out += content
             print(content, end="")
 
+    print("\n\n\n")
+
     # return completion.hidden_thoughts, completion.snippet_path, completion.snippet_source_code, completion.snippet_explaination
     out = parse_to_json(out)
     print(out)
