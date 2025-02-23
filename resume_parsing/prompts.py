@@ -10,7 +10,7 @@ Company Information:
 Job Details:
   - Title (required)
   - Description (detailed job description)
-  - Responsibilities (if available): list key responsibilities for the role
+  - Responsibilities (if available): list all responsibilities for the role
   - Requirements (if available): list required qualifications and skills
   - Skills (if available): list technical skills or proficiencies required
   - Employment Type (if available): e.g., Full-Time, Part-Time, Contract
