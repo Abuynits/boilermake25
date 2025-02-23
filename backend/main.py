@@ -1,8 +1,9 @@
 import os
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+import uvicorn
+
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from backend.code_executors import execute_code
@@ -13,12 +14,6 @@ class CodeRequest(BaseModel):
     code: str
 
 app = FastAPI()
-
-# Mount the output directory for serving annotated PDFs
-output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend', 'output')
-os.makedirs(output_dir, exist_ok=True)
-app.mount("/output", StaticFiles(directory=output_dir), name="output")
-print(f"Mounted output directory: {output_dir}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -99,5 +94,4 @@ async def get_pdf(hash: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
