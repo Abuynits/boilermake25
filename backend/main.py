@@ -37,14 +37,14 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/api/analyze")
-async def analyze_resume(
+def analyze_resume(
     resume: UploadFile = File(...),
     job_posting: str = Form(...)
 ):
     try:
         # Save resume to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(resume.filename)[1]) as tmp:
-            content = await resume.read()
+            content = resume.file.read()
             tmp.write(content)
             tmp.flush()
             
@@ -94,7 +94,7 @@ async def analyze_resume(
         return {"error": str(e)}, 500
 
 @app.post("/api/execute-code")
-async def execute_code_endpoint(request: CodeRequest):
+def execute_code_endpoint(request: CodeRequest):
     try:
         result = execute_code(request.code, request.language)
         return result
@@ -102,12 +102,12 @@ async def execute_code_endpoint(request: CodeRequest):
         return {"error": str(e), "success": False, "output": ""}
 
 @app.post("/api/grift_check")
-async def analyze_resume(
+def analyze_resume(
     resume_path: str = Form(...),
     resume_data_path: str = Form(...)
 ):
     try:
-        out_path = await grift_check(resume_path, resume_data_path)
+        out_path = grift_check(resume_path, resume_data_path)
         return {
             "out_path": out_path
         }
