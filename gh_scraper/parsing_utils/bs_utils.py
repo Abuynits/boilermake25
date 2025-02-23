@@ -69,3 +69,12 @@ def extract_files_from_gh(user, repo):
     for tgt_dir in dirs:
         files += extract_files_from_dir(user,repo, tgt_dir)
     return files 
+
+def extract_email_from_repo(gh_username):
+    # https://github.com/jinensetpal/boilerbot
+    url = f"https://github.com/{gh_username}/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    # <a class="Link--primary" href="mailto:abuynits@gmail.com">abuynits@gmail.com</a>
+    desc = soup.find_all("a", class_="Link--primary")
+    return None if len(desc) == 0 else desc[0].text.strip()
