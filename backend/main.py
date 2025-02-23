@@ -82,10 +82,16 @@ async def analyze_resume(
 @app.get("/api/pdf/{hash}")
 async def get_pdf(hash: str):
     try:
-        pdf_path = os.path.join(os.path.dirname(__file__), 'output', 'resumes', hash, 'latest_annotated.pdf')
-        print(f"Looking for PDF at: {pdf_path}")
-        if not os.path.exists(pdf_path):
-            raise HTTPException(status_code=404, detail="PDF not found")
+        output_dir = os.path.join(os.path.dirname(__file__), 'output', 'resumes', hash)
+        
+        # Find the annotated PDF
+        pdf_files = [f for f in os.listdir(output_dir) if '_annotated.pdf' in f]
+        if not pdf_files:
+            raise HTTPException(status_code=404, detail=f"No annotated PDF found in {output_dir}")
+        
+        pdf_path = os.path.join(output_dir, pdf_files[0])
+        print(f"Found annotated PDF at: {pdf_path}")
+        
         return FileResponse(pdf_path, media_type='application/pdf')
     except HTTPException as e:
         raise e
