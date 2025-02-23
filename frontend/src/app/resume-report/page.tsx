@@ -23,7 +23,6 @@ export default function ResumeReport() {
       });
   }, []);
 
-  const [pdfPath, setPdfPath] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -40,12 +39,7 @@ export default function ResumeReport() {
           throw new Error('Failed to get annotated PDF');
         }
 
-        const data = await response.json();
-        if (data.out_path) {
-          setPdfPath(data.out_path);
-        } else {
-          throw new Error('No PDF path returned');
-        }
+        await response.json();
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to get annotated PDF');
       } finally {
@@ -75,12 +69,12 @@ export default function ResumeReport() {
           <div className={styles.loading}>Loading annotated resume...</div>
         ) : error ? (
           <div className={styles.error}>{error}</div>
-        ) : pdfPath ? (
+        ) : true ? (
           <div className={styles.analysis}>
             <div className={styles.pdfContainer}>
               <h2>Annotated Resume Analysis</h2>
               <iframe 
-                src={`http://localhost:8000/api/pdf`}
+                src={`http://localhost:8000/api/annotated-pdf`}
                 className={styles.pdfViewer}
                 title="Annotated Resume"
               />

@@ -13,6 +13,7 @@ from fastapi import (
 from starlette.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import json
 import tempfile
 from uuid import uuid4
 
@@ -92,45 +93,41 @@ def get_analysis(session_data: SessionData = Depends(get_session)):
 
 @app.post("/api/grift_check")
 def grift_check_endpoint(session_data: SessionData = Depends(get_session)):
-    try:
-        resume_data = session_data.resume_content
-        job_posting = session_data.job_post
+    resume_data = session_data.resume_content
+    job_posting = session_data.job_post
 
-        proccessed = process_resume_and_posting(resume_data, job_posting)
-        resume_json = proccessed["resume_analysis"]
+    proccessed = process_resume_and_posting(resume_data, job_posting)
+    resume_json = proccessed["resume_analysis"]
 
-        # resume_pdf_path = os.path.join(output_dir, pdf_files[0])
-        # resume_json_path = os.path.join(output_dir, "resumes_analysis.json")
+    # resume_pdf_path = os.path.join(output_dir, pdf_files[0])
+    # resume_json_path = os.path.join(output_dir, "resumes_analysis.json")
 
-        # save both to temp files
-        resume_pdf_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
-        resume_pdf_tmp.write(resume_data)
-        resume_pdf_tmp.flush()
-        resume_pdf_path = resume_pdf_tmp.name
+    # save both to temp files
+    resume_pdf_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    resume_pdf_tmp.write(resume_data)
+    resume_pdf_tmp.flush()
+    resume_pdf_path = resume_pdf_tmp.name
 
-        resume_json_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".json")
-        resume_json_tmp.write(resume_json)
-        resume_json_tmp.flush()
-        resume_json_path = resume_json_tmp.name
+    resume_json_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".json")
+    resume_json_tmp.write(json.dumps(resume_json).encode())
+    resume_json_tmp.flush()
+    resume_json_path = resume_json_tmp.name
 
-        # Call grift check with the correct paths
-        out_path = grift_check(resume_pdf_path, resume_json_path)
-        print(f"Generated annotated PDF at: {out_path}")
+    # Call grift check with the correct paths
+    out_path = grift_check(resume_pdf_path, resume_json_path)
+    print(f"Generated annotated PDF at: {out_path}")
 
-        resume_pdf_tmp.close()
-        resume_json_tmp.close()
+    resume_pdf_tmp.close()
+    resume_json_tmp.close()
 
-        # load out_path into a byte array
-        with open(out_path, "rb") as f:
-            annot_pdf = f.read()
+    # load out_path into a byte array
+    with open(out_path, "rb") as f:
+        annot_pdf = f.read()
 
-        # add it to session
-        session_data.annot_pdf = annot_pdf
+    # add it to session
+    session_data.annot_pdf = annot_pdf
 
-        return {}
-    except Exception as e:
-        print(f"Error in grift check: {str(e)}")
-        return {"error": str(e)}, 500
+    return {}
 
 
 @app.get("/api/pdf")
