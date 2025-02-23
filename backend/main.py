@@ -1,12 +1,17 @@
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, Response, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.concurrency import run_in_threadpool
 from pydantic import BaseModel
+from session import cookie, backend, SessionData
+from uuid import uuid4
 
 from .code_executors import execute_code
-from .resume_analyzer import process_resume_and_posting, analysis_cache
+from .resume_analyzer import process_resume_and_posting
+
 
 class CodeRequest(BaseModel):
     code: str
+
 
 app = FastAPI()
 
@@ -18,25 +23,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
+
 @app.post("/api/analyze")
-def analyze_resume(
-    resume: UploadFile = File(...),
-    job_posting: str = Form(...)
-):
-    return process_resume_and_posting(resume, job_posting)
+async def analyze_resume(resume: UploadFile = File(...), job_posting: str = Form(...)):
+    # creates a session
+    res_json, resume_content = await run_in_threadpool(
+        process_resume_and_posting, resume, job_posting
+    )
+
+    res = Response(content=res_json)
+    session = uuid4()
+    data = SessionData(resume_text=resume_content, job_posting_text=job_posting)
+    await backend.create(session, data)
+    cookie.attach_to_response(res, session)
+
+    return res
+
 
 @app.post("/api/execute-code")
 def execute_code_endpoint(request: CodeRequest):
     result = execute_code(request.code, request.language)
     return result
 
-@app.get("/api/get-analysis/{hash_key}")
-def get_analysis(hash_key: str):
-    cached_data = analysis_cache.get_resume(hash_key)
+
+@app.get("/api/get-analysis")
+def get_analysis():
+    # cached_data = analysis_cache.get_resume(hash_key)
     if not cached_data:
         return {"error": "Analysis not found"}, 404
     return cached_data
@@ -44,4 +61,5 @@ def get_analysis(hash_key: str):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
