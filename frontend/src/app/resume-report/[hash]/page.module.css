@@ -2,26 +2,6 @@
   @apply min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8;
 }
 
-.breadcrumbs {
-  @apply max-w-4xl mx-auto mb-8 flex items-center space-x-2 text-sm;
-}
-
-.breadcrumbLink {
-  @apply text-blue-600 hover:text-blue-800 cursor-pointer;
-}
-
-.breadcrumbCurrent {
-  @apply font-medium text-gray-900;
-}
-
-.breadcrumbInactive {
-  @apply text-gray-400;
-}
-
-.breadcrumbSeparator {
-  @apply text-gray-400;
-}
-
 .content {
   @apply max-w-4xl mx-auto bg-white p-8 rounded-lg shadow;
 }

@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import styles from './page.module.css';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function ResumeReport() {
   const router = useRouter();
@@ -18,13 +19,7 @@ export default function ResumeReport() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.breadcrumbs}>
-        <button onClick={handleBack} className={styles.breadcrumbLink}>Upload</button>
-        <span className={styles.breadcrumbSeparator}>/</span>
-        <span className={styles.breadcrumbCurrent}>Resume Report</span>
-        <span className={styles.breadcrumbSeparator}>/</span>
-        <span className={styles.breadcrumbInactive}>Assessment</span>
-      </div>
+      <Breadcrumbs items={[]} />
 
       <div className={styles.content}>
         <h1 className={styles.title}>Resume Report</h1>

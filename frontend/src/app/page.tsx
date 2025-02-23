@@ -115,7 +115,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-        <h1 className={styles.title}>Resume Matcher</h1>
+        <h1 className={styles.title}>Resume to Job Analysis Suite</h1>
         
         <form onSubmit={handleSubmit} className={styles.form}>
           {/* Resume Upload */}
