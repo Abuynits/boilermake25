@@ -1,11 +1,21 @@
 import sys
+import time
 import json
 import shlex
 import tempfile
 import subprocess
 from pathlib import Path
+from joblib import Memory
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
+
+FULL_CLONE = False
+GIT_LOG_RANK = False
+
+if GIT_LOG_RANK and not FULL_CLONE:
+    raise Exception("GIT_LOG_RANK requires FULL_CLONE")
+
+memory = Memory("./.cache", verbose=0)
 
 
 def file_pigz_entropy(path: Path):
@@ -28,23 +38,43 @@ class FileInfo:
     path: Path
     n_bytes: int
     complexity: int
+    weighted_complexity: float
     entropy: float
     language: str
     human: bool
+    change_count: int = None
 
     @property
     def heuristic(self):
-        return self.entropy
-        # return self.complexity
+        if GIT_LOG_RANK:
+            return self.change_count
+        else:
+            return self.entropy
+
+    HEURISTIC_REVERSE = True
 
     def with_entropy(self):
         return FileInfo(
             path=self.path,
             n_bytes=self.n_bytes,
             complexity=self.complexity,
+            weighted_complexity=self.weighted_complexity,
             entropy=file_pigz_entropy(self.path),
             language=self.language,
             human=self.human,
+            change_count=self.change_count,
+        )
+
+    def with_change_count(self, count):
+        return FileInfo(
+            path=self.path,
+            n_bytes=self.n_bytes,
+            complexity=self.complexity,
+            weighted_complexity=self.weighted_complexity,
+            entropy=self.entropy,
+            language=self.language,
+            human=self.human,
+            change_count=count,
         )
 
 
@@ -64,7 +94,8 @@ def transform_scc(input_data):
             file_entry = FileInfo(
                 path=loc,
                 n_bytes=file_info.get("Bytes", 0),
-                complexity=file_info.get("Complexity", 0),
+                complexity=file_info.get("Complexity", -1),
+                weighted_complexity=file_info.get("WeightedComplexity", -1),
                 language=file_info.get("Language", ""),
                 entropy=None,
                 human=not (binary or minified or generated),
@@ -75,7 +106,7 @@ def transform_scc(input_data):
 
 
 def repo_to_context(path: Path, char_limit=350000):
-    char_limit *= 0.94 # account for xml tags overhead
+    char_limit *= 0.94  # account for xml tags overhead
     # cmd = shlex.split("scc --by-file --format json")
     # cmd.append(str(path))
     cmd = [
@@ -97,18 +128,59 @@ def repo_to_context(path: Path, char_limit=350000):
     out = out.replace('"/repo', f'"{path}')
     if scc.returncode != 0:
         raise Exception("scc failed")
-    
-    non_code_languages = ["Markdown", "YAML", "TOML", "JSON", "XML", "Dockerfile"]
 
-    code_files = transform_scc(json.loads(out))
-    code_files = filter(lambda x: x.human, code_files)
-    code_files = filter(lambda x: x.language not in non_code_languages, code_files)
-    code_files = filter(lambda x: "/tests/" not in str(x.path), code_files)
+    exclude_languages = ["Markdown", "YAML", "TOML", "JSON", "XML", "Dockerfile", "C Header", "C++ Header"]
+
+    out = json.loads(out)
+    # print(json.dumps(out, indent=2), file=sys.stderr)
+    code_files = transform_scc(out)
+
+    if FULL_CLONE:
+        cmd = [
+            "git",
+            "--git-dir",
+            f"{path}/.git",
+            "log",
+            "--pretty=format:",
+            "--name-only",
+        ]
+        git = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        out, _ = git.communicate()
+        if git.returncode != 0:
+            raise Exception("git failed")
+        out = out.decode("utf-8")
+        out = out.split("\n")
+        # count each unique entry in out
+        file_counts = {}
+        for line in out:
+            if line not in file_counts:
+                file_counts[line] = 0
+            file_counts[line] += 1
+
+    exclude_dirs = ["test", "spec", "unit_test", "benchmark", "demo"]
+    exclude_dirs += [x + "s" for x in exclude_dirs]
+
+    code_files = [x for x in code_files if x.human]
     original_files = code_files
-    code_files = filter(lambda x: x.complexity > 0, code_files)
+    code_files = [x for x in code_files if x.complexity > 0]
+    code_files = [x for x in code_files if x.language not in exclude_languages]
+    code_files = [x for x in code_files if not any(f"/{y}/" in str(x.path) for y in exclude_dirs)]
     with ThreadPoolExecutor() as executor:
         code_files = list(executor.map(lambda x: x.with_entropy(), code_files))
-    code_files = sorted(code_files, key=lambda x: x.heuristic, reverse=True)
+
+    if GIT_LOG_RANK:
+        code_files = list(
+            map(
+                lambda x: x.with_change_count(
+                    file_counts.get(str(x.path)[len(str(path)) + 1 :], 0)
+                ),
+                code_files,
+            )
+        )
+
+    code_files = sorted(
+        code_files, key=lambda x: x.heuristic, reverse=FileInfo.HEURISTIC_REVERSE
+    )
 
     pruned_files = [x for x in original_files if x not in code_files]
     total_bytes = sum(x.n_bytes for x in code_files)
@@ -116,7 +188,9 @@ def repo_to_context(path: Path, char_limit=350000):
         removed = code_files.pop()
         total_bytes -= removed.n_bytes
         pruned_files.append(removed)
-    # print(f"pruned {len(pruned_files)} files", file=sys.stderr)
+
+    print(f"pruned {len(pruned_files)} files", file=sys.stderr)
+    print(f"code files: {len(code_files)}", file=sys.stderr)
 
     # for f in pruned_files:
     #     print(f, file=sys.stderr)
@@ -148,20 +222,29 @@ class RepoInstance:
         self.path = Path(self.tmp_dir.name)
 
     def open(self):
-        cmd = shlex.split("git clone --depth 1")
+        start = time.time()
+        print(f"cloning {self.git_url} to {self.path}", file=sys.stderr)
+        if FULL_CLONE:
+            cmd = shlex.split("git clone")
+        else:
+            cmd = shlex.split("git clone --depth 1")
         cmd.append(self.git_url)
         cmd.append(str(self.path))
-        git = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        git = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         git.communicate()
         if git.returncode != 0:
             raise Exception("git failed")
+        took = time.time() - start
+        print(f"cloned in {took:.2f}s", file=sys.stderr)
 
     def close(self):
         self.tmp_dir.cleanup()
 
-def repo_url_to_context(git_url: str):
+
+@memory.cache
+def repo_url_to_context(git_url: str, char_limit=350000):
     repo = RepoInstance(git_url)
     repo.open()
-    out = repo_to_context(repo.path)
+    out = repo_to_context(repo.path, char_limit)
     repo.close()
     return out
