@@ -1,12 +1,10 @@
 import os
-import sys
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from pathlib import Path
 
-# Use absolute imports
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from backend.code_executors import execute_code
 from backend.resume_analyzer import process_resume_and_posting, analysis_cache
 from gh_scraper.FINAL import grift_check
@@ -15,6 +13,12 @@ class CodeRequest(BaseModel):
     code: str
 
 app = FastAPI()
+
+# Mount the output directory for serving annotated PDFs
+output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend', 'output')
+os.makedirs(output_dir, exist_ok=True)
+app.mount("/output", StaticFiles(directory=output_dir), name="output")
+print(f"Mounted output directory: {output_dir}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -70,15 +74,29 @@ async def analyze_resume(
         
         # Call grift check with the correct paths
         out_path = grift_check(resume_pdf_path, resume_json_path)
+        print(f"Generated annotated PDF at: {out_path}")
         
-        # Make the path relative to the server root for the frontend
-        relative_path = os.path.relpath(out_path, os.path.dirname(__file__))
+        # Return the full path - we'll serve it directly in a separate endpoint
         return {
-            "out_path": f"/{relative_path.replace(os.sep, '/')}"
+            "out_path": out_path
         }
     except Exception as e:
         print(f"Error in grift check: {str(e)}")
         return {"error": str(e)}, 500
+
+@app.get("/api/pdf/{hash}")
+async def get_pdf(hash: str):
+    try:
+        pdf_path = os.path.join(os.path.dirname(__file__), 'output', 'resumes', hash, 'latest_annotated.pdf')
+        print(f"Looking for PDF at: {pdf_path}")
+        if not os.path.exists(pdf_path):
+            raise HTTPException(status_code=404, detail="PDF not found")
+        return FileResponse(pdf_path, media_type='application/pdf')
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"Error serving PDF: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

@@ -71,7 +71,7 @@ export default function ResumeReport() {
             <div className={styles.pdfContainer}>
               <h2>Annotated Resume Analysis</h2>
               <iframe 
-                src={`http://localhost:8000${pdfPath}`}
+                src={`http://localhost:8000/api/pdf/${hash}`}
                 className={styles.pdfViewer}
                 title="Annotated Resume"
               />

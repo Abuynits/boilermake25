@@ -24,7 +24,7 @@ def scrape_readme(gh_username, data):
             except Exception as e:
                 continue
         if not os.path.exists(Path(__file__).parent / 'data' / gh_username):
-            os.mkdir(Path(__file__).parent / 'data' / gh_username)
+            os.makedirs(Path(__file__).parent / 'data' / gh_username)
 
         repo_name = gh_path.split('/')[-1]
         repo_owner = gh_path.split('/')[0]
