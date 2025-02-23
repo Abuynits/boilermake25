@@ -70,6 +70,22 @@ The frontend will run on `http://localhost:3000`
 4. Click Submit to analyze
 5. View the analysis results below the form
 
+
+## Running any Python file
+
+Say you wanna run `folder_name/file_name.py`. Do so from the repository root:
+```bash
+$ pwd
+/path/to/boilermake25
+$ source .venv/bin/activate # make sure venv is activated
+$ python -m folder_name.file_name
+
+# for example
+$ python -m code_comprehension <github url> "<topics>"
+```
+
+You don't need to do a .something after code_comprehension because that folder has a `__main__.py` file.
+
 ## Output
 
 The application will:
