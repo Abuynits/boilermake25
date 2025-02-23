@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import datetime
 import hashlib
 import json
@@ -5,28 +6,26 @@ import os
 import tempfile
 
 from fastapi import FastAPI, File, UploadFile, Form, Body
+=======
+import sys
+import os
+from fastapi import FastAPI, File, UploadFile, Form
+>>>>>>> Stashed changes
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from gh_scraper.FINAL import grift_check
 
+from .code_executors import execute_code
+from .resume_analyzer import process_resume_and_posting, analysis_cache
+
 class CodeRequest(BaseModel):
     code: str
-    language: str = 'python'  # Default to Python if not specified
-
-from .code_executors import execute_code
-
-from resume_parsing.parse import (
-    load_input,
-    resume_chain,
-    posting_chain
-)
 
 app = FastAPI()
 
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Adjust this based on your frontend URL
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,6 +41,7 @@ def analyze_resume(
     job_posting: str = Form(...)
 ):
     try:
+<<<<<<< Updated upstream
         # Save resume to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(resume.filename)[1]) as tmp:
             content = resume.file.read()
@@ -90,6 +90,9 @@ def analyze_resume(
             "hash": hash
         }
         
+=======
+        return await process_resume_and_posting(resume, job_posting)
+>>>>>>> Stashed changes
     except Exception as e:
         return {"error": str(e)}, 500
 
@@ -101,6 +104,7 @@ def execute_code_endpoint(request: CodeRequest):
     except Exception as e:
         return {"error": str(e), "success": False, "output": ""}
 
+<<<<<<< Updated upstream
 @app.post("/api/grift_check")
 def analyze_resume(
     resume_path: str = Form(...),
@@ -113,6 +117,14 @@ def analyze_resume(
         }
     except Exception as e:
         return {"error": str(e)}, 500
+=======
+@app.get("/api/get-analysis/{hash_key}")
+async def get_analysis(hash_key: str):
+    cached_data = analysis_cache.get(hash_key)
+    if not cached_data:
+        return {"error": "Analysis not found"}, 404
+    return cached_data
+>>>>>>> Stashed changes
 
 
 if __name__ == "__main__":
