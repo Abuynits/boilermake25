@@ -1,5 +1,4 @@
 import sys
-import json
 from . import repo_url_to_context_json, files_json_to_model_context
 
 if __name__ == "__main__":

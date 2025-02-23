@@ -1,6 +1,7 @@
 import os
 import json
 
+from _secrets import load_secrets
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
@@ -44,8 +45,6 @@ with open(path, 'r') as f:
     rated_resume = json.load(f)
 annotate_resume(rated_resume, in_path, out_path)
 
-# breakpoint()
-api_key = os.environ.get("OPENAI_API_KEY")
 # breakpoint()
 inp = load_input(in_path)
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 

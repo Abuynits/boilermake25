@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import styles from './styles.module.css';
 
@@ -56,18 +56,29 @@ const LANGUAGE_MAP: { [key: string]: string } = {
   'txt': 'plaintext'
 };
 
-const FILE_ICONS: { [key: string]: string } = {
-  'py': '🐍',
-  'js': '📜',
-  'ts': '📘',
-  'jsx': '⚛️',
-  'tsx': '⚛️',
-  'html': '🌐',
-  'css': '🎨',
-  'json': '📋',
-  'txt': '📄',
-  'md': '📝',
-  'default': '📄'
+const FILE_ICONS: { [key: string]: JSX.Element | string } = {
+  // Programming Languages
+  'py': '<i class="devicon-python-plain colored"></i>',
+  'js': '<i class="devicon-javascript-plain colored"></i>',
+  'ts': '<i class="devicon-typescript-plain colored"></i>',
+  'jsx': '<i class="devicon-react-original colored"></i>',
+  'tsx': '<i class="devicon-react-original colored"></i>',
+  'html': '<i class="devicon-html5-plain colored"></i>',
+  'css': '<i class="devicon-css3-plain colored"></i>',
+  'java': '<i class="devicon-java-plain colored"></i>',
+  'cpp': '<i class="devicon-cplusplus-plain colored"></i>',
+  'c': '<i class="devicon-c-plain colored"></i>',
+  'go': '<i class="devicon-go-plain colored"></i>',
+  'rs': '<i class="devicon-rust-plain colored"></i>',
+  'rb': '<i class="devicon-ruby-plain colored"></i>',
+  'php': '<i class="devicon-php-plain colored"></i>',
+  
+  // Data & Config Files
+  'json': '<svg class="w-5 h-5 text-yellow-600" viewBox="0 0 24 24" fill="currentColor"><path d="M4 14.745c0 1.103.896 2 2 2h12c1.104 0 2-.897 2-2v-5.49c0-1.103-.896-2-2-2H6c-1.104 0-2 .897-2 2v5.49z"/><path d="M6 18.745h12v-3H6v3zm0-11.49h12v-3H6v3z"/></svg>',
+  'md': '<svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor"><path d="M14.345 6h-4.69c-.241 0-.437.196-.437.437v11.126c0 .241.196.437.437.437h4.69c.241 0 .437-.196.437-.437V6.437c0-.241-.196-.437-.437-.437zM7.5 6h-3c-.276 0-.5.224-.5.5v10c0 .276.224.5.5.5h3c.276 0 .5-.224.5-.5v-10c0-.276-.224-.5-.5-.5zM19.5 6h-3c-.276 0-.5.224-.5.5v10c0 .276.224.5.5.5h3c.276 0 .5-.224.5-.5v-10c0-.276-.224-.5-.5-.5z"/></svg>',
+  'sql': '<svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor"><path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg>',
+  'txt': '<svg class="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/></svg>',
+  'default': '<svg class="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1v5h5v10H6V3h7z"/></svg>'
 };
 
 interface File {
@@ -151,6 +162,14 @@ export default function CodeEditor() {
     }
   };
 
+  // Update code when active tab changes
+  useEffect(() => {
+    const file = files.find(f => f.name === activeTab);
+    if (file) {
+      setCode(file.content);
+    }
+  }, [activeTab, files]);
+
   // Scroll output to bottom
   useEffect(() => {
     if (outputRef.current) {
@@ -169,7 +188,10 @@ export default function CodeEditor() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ 
+          code,
+          language: activeTab ? activeTab.split('.').pop() || 'python' : 'python'
+        }),
       });
 
       const data = await response.json();
@@ -187,7 +209,7 @@ export default function CodeEditor() {
     }
   };
 
-  const getFileIcon = (fileName: string): string => {
+  const getFileIcon = (fileName: string): JSX.Element | string => {
     const extension = fileName.split('.').pop() || '';
     return FILE_ICONS[extension] || FILE_ICONS.default;
   };
@@ -217,6 +239,7 @@ export default function CodeEditor() {
     setFiles([...files, newFile]);
     setOpenTabs([...openTabs, { id: finalName, name: finalName, language: newFile.language }]);
     setActiveTab(finalName);
+    setCode(''); // Reset code state when creating new file
     setShowNewFileDialog(false);
     setNewFileName('');
   };
@@ -311,7 +334,7 @@ export default function CodeEditor() {
               className={`${styles.file} ${activeTab === file.name ? styles.activeFile : ''}`}
               onClick={() => handleFileClick(file)}
             >
-              <span className={styles.fileIcon}>{getFileIcon(file.name)}</span>
+              <span className={styles.fileIcon} dangerouslySetInnerHTML={{ __html: getFileIcon(file.name) }} />
               <span className={styles.fileName}>{file.name}</span>
               <button
                 className={styles.deleteFile}

@@ -2,7 +2,7 @@ import openai
 from . import topic_examples
 from . import prompts
 from importlib.resources import read_text
-from secrets import HYPERBOLIC_API_KEY
+from _secrets import HYPERBOLIC_API_KEY
 
 topics = topic_examples.topics
 

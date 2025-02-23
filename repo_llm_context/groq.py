@@ -1,18 +1,13 @@
-import os
 import sys
-import instructor
+
+import json
 from groq import Groq
 from joblib import Memory
-from pydantic import BaseModel
-from secrets import GROQ_KEY
+from _secrets import GROQ_KEY
 
 memory = Memory("./.cache", verbose=0)
-client = instructor.from_groq(Groq(api_key=GROQ_KEY), mode=instructor.Mode.JSON)
-
-
-class RespModel(BaseModel):
-    files: list[str]
-
+# client = instructor.from_groq(Groq(api_key=GROQ_KEY), mode=instructor.Mode.JSON)
+client = Groq(api_key=GROQ_KEY)
 
 filter_list_prompt = """Given a list of file names and a topic, return a JSON list containing a subset of file names which are relevant to the topic, in order of relevancy (most to least relevant). Format should look like this
 ```
@@ -23,7 +18,7 @@ filter_list_prompt = """Given a list of file names and a topic, return a JSON li
 
 
 @memory.cache
-def groq_filter_list(file_list: list[str], topic: str) -> RespModel:
+def groq_filter_list(file_list: list[str], topic: str):
     # for name in file_list:
     #     print(name, file=sys.stderr)
     messages = [
@@ -38,13 +33,18 @@ def groq_filter_list(file_list: list[str], topic: str) -> RespModel:
     ]
 
     completion = client.chat.completions.create(
-        messages=messages, response_model=RespModel, model="llama-3.3-70b-versatile", temperature=0.0
+        messages=messages,
+        model="llama-3.3-70b-versatile",
+        temperature=0.0,
+        response_format={"type": "json_object"},
     )
 
-    out = completion.files
+    out = completion.choices[0].message.content
+    out = json.loads(out)["files"]
     out = [x for x in out if x in file_list]
 
     return out
+
 
 if __name__ == "__main__":
     import sys

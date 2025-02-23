@@ -5,13 +5,17 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi>=0.115.8",
     "groq>=0.18.0",
-    "instructor>=1.7.2",
     "joblib>=1.4.2",
     "langchain>=0.3.19",
+    "langchain-community>=0.3.18",
+    "langchain-openai>=0.3.6",
     "modal>=0.73.66",
     "openai>=1.64.0",
     "pydantic>=2.10.6",
+    "python-multipart>=0.0.20",
     "rapidfuzz>=3.12.1",
     "requests>=2.32.3",
+    "uvicorn>=0.34.0",
 ]

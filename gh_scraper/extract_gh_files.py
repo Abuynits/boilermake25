@@ -8,9 +8,9 @@ import openai
 import time
 from urllib.request import urlopen
 from repo_llm_context import repo_url_to_commits
+from _secrets import OPENAI_API_KEY as api_key
 data_name = 'example_res.json'
 
-api_key = os.environ.get("OPENAI_API_KEY")
 openai.api_key = api_key
 client = OpenAI()
 #gh_username = "Abuynits"

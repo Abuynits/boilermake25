@@ -11,14 +11,11 @@ from pydantic import BaseModel
 
 class CodeRequest(BaseModel):
     code: str
+    language: str = 'python'  # Default to Python if not specified
 
-from code_executor import execute_python_code
-
-# Add the parent directory to sys.path to import resume_parsing
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from .code_executors import execute_code
 
 from resume_parsing.parse import (
-    load_secrets,
     load_input,
     resume_chain,
     posting_chain
@@ -41,9 +38,6 @@ async def analyze_resume(
     job_posting: str = Form(...)
 ):
     try:
-        # Load OpenAI API key
-        load_secrets()
-        
         # Save resume to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(resume.filename)[1]) as tmp:
             content = await resume.read()
@@ -96,9 +90,9 @@ async def analyze_resume(
         return {"error": str(e)}, 500
 
 @app.post("/api/execute-code")
-async def execute_code(request: CodeRequest):
+async def execute_code_endpoint(request: CodeRequest):
     try:
-        result = execute_python_code(request.code)
+        result = execute_code(request.code, request.language)
         return result
     except Exception as e:
         return {"error": str(e), "success": False, "output": ""}
