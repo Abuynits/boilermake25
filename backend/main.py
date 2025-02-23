@@ -5,8 +5,14 @@ import os
 import sys
 import tempfile
 
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, Body
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+class CodeRequest(BaseModel):
+    code: str
+
+from code_executor import execute_python_code
 
 # Add the parent directory to sys.path to import resume_parsing
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -82,11 +88,20 @@ async def analyze_resume(
             "saved_files": {
                 "resume": resume_file,
                 "job": job_file
-            }
+            },
+            "hash": hash
         }
         
     except Exception as e:
         return {"error": str(e)}, 500
+
+@app.post("/api/execute-code")
+async def execute_code(request: CodeRequest):
+    try:
+        result = execute_python_code(request.code)
+        return result
+    except Exception as e:
+        return {"error": str(e), "success": False, "output": ""}
 
 if __name__ == "__main__":
     import uvicorn

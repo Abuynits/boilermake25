@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function Home() {
+  const router = useRouter();
   const [resume, setResume] = useState<File | null>(null);
   const [jobPosting, setJobPosting] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -96,8 +98,11 @@ export default function Home() {
       }
       
       const data = await response.json();
-      setSuccess('Analysis complete! Results have been saved to output directory.');
-      autoDismissNotification('success');
+      setSuccess('Analysis complete! Redirecting to report...');
+      // Short delay to show the success message before redirecting
+      setTimeout(() => {
+        router.push(`/resume-report/${data.hash}`);
+      }, 1000);
     } catch (_err) {
       setError('An error occurred while uploading. Please try again.');
       autoDismissNotification('error');
