@@ -59,13 +59,11 @@
 }
 
 .deleteFile {
-  @apply ml-auto p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 focus:outline-none rounded
-    transition-colors duration-150 ease-in-out opacity-0;
+  @apply ml-auto px-2 text-gray-500 hover:text-red-600 focus:outline-none rounded;
 }
 
-.file:hover .deleteFile,
-.deleteFileVisible {
-  @apply opacity-100 text-gray-500;
+.file:hover .deleteFile {
+  @apply bg-gray-100;
 }
 
 .activeFile {
@@ -133,11 +131,35 @@
 }
 
 .output {
-  @apply text-sm font-mono text-gray-800 whitespace-pre-wrap pb-4;
+  @apply text-sm font-mono text-gray-800 whitespace-pre-wrap;
 }
 
 .error {
   @apply text-sm font-mono text-red-600 whitespace-pre-wrap;
+}
+
+.overlay {
+  @apply fixed inset-0 bg-black bg-opacity-30 z-40;
+}
+
+.confirmDialog {
+  @apply fixed bg-white rounded-lg shadow-lg p-4 z-50;
+}
+
+.confirmText {
+  @apply text-sm text-gray-700 mb-4;
+}
+
+.confirmActions {
+  @apply flex justify-end space-x-2;
+}
+
+.confirmButton {
+  @apply px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm;
+}
+
+.cancelButton {
+  @apply px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm;
 }
 
 .placeholder {

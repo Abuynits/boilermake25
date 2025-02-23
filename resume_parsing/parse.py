@@ -53,8 +53,7 @@ def load_input(file_path: str, is_txt: bool=False) -> str:
 # )
 # ################################################################ 
 
-
-# llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
+llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
 
 # # Build the chain using the pipe syntax.
 # resume_chain = resume_prompt | llm | resume_parser

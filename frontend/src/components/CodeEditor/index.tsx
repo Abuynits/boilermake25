@@ -7,7 +7,13 @@ import styles from './styles.module.css';
 // Dynamically import Monaco Editor
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
-// File type icons mapping
+interface DeleteConfirmation {
+  fileName: string;
+  x: number;
+  y: number;
+}
+
+
 // Unique list of supported languages with their display names
 const SUPPORTED_LANGUAGES = [
   { id: 'python', name: 'Python' },
@@ -70,12 +76,6 @@ interface File {
   language: string;
 }
 
-interface DeleteConfirmation {
-  fileName: string;
-  x: number;
-  y: number;
-}
-
 interface Tab {
   id: string;
   name: string;
@@ -92,12 +92,7 @@ export default function CodeEditor() {
       name: 'main.py',
       content: '# Write your code here\nprint("Hello, World!")',
       language: 'python'
-    },
-    // {
-    //   name: 'test.py',
-    //   content: '# Test your code here\ndef test_function():\n    pass',
-    //   language: 'python'
-    // }
+    }
   ]);
 
   const [openTabs, setOpenTabs] = useState<Tab[]>([
@@ -186,6 +181,7 @@ export default function CodeEditor() {
       }
     } catch (err) {
       setError('Failed to execute code. Please try again.');
+      console.error(err)
     } finally {
       setIsExecuting(false);
     }
@@ -227,6 +223,14 @@ export default function CodeEditor() {
 
   const handleDeleteClick = (fileName: string, event: React.MouseEvent) => {
     event.stopPropagation();
+    event.preventDefault();
+    
+    if (files.length <= 1) {
+      alert('Cannot delete the last file!');
+      return;
+    }
+
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     setDeleteConfirmation({
       fileName,
@@ -236,13 +240,6 @@ export default function CodeEditor() {
   };
 
   const handleDeleteConfirm = (fileName: string) => {
-    setDeleteConfirmation(null);
-    
-    if (files.length <= 1) {
-      alert('Cannot delete the last file!');
-      return;
-    }
-
     const newFiles = files.filter(f => f.name !== fileName);
     setFiles(newFiles);
 
@@ -258,6 +255,7 @@ export default function CodeEditor() {
         setCode(firstFile.content);
       }
     }
+    setDeleteConfirmation(null);
   };
 
   return (
@@ -317,12 +315,11 @@ export default function CodeEditor() {
               <span className={styles.fileIcon}>{getFileIcon(file.name)}</span>
               <span className={styles.fileName}>{file.name}</span>
               <button
-                className={`${styles.deleteFile} ${activeTab === file.name ? styles.deleteFileVisible : ''}`}
+                className={styles.deleteFile}
                 onClick={(e) => handleDeleteClick(file.name, e)}
                 title="Delete file"
-                aria-label="Delete file"
               >
-                ✕
+                ×
               </button>
             </div>
           ))}
@@ -417,35 +414,35 @@ export default function CodeEditor() {
         </div>
       </div>
       {deleteConfirmation && (
-        <div 
-          className={styles.confirmDialog}
-          style={{
-            left: `${deleteConfirmation.x}px`,
-            top: `${deleteConfirmation.y}px`
-          }}
-        >
-          <p className={styles.confirmText}>Delete {deleteConfirmation.fileName}?</p>
-          <div className={styles.confirmActions}>
-            <button
-              className={styles.confirmButton}
-              onClick={() => handleDeleteConfirm(deleteConfirmation.fileName)}
-            >
-              Delete
-            </button>
-            <button
-              className={styles.cancelButton}
-              onClick={() => setDeleteConfirmation(null)}
-            >
-              Cancel
-            </button>
+        <>
+          <div 
+            className={styles.overlay}
+            onClick={() => setDeleteConfirmation(null)}
+          />
+          <div 
+            className={styles.confirmDialog}
+            style={{
+              left: `${deleteConfirmation.x}px`,
+              top: `${deleteConfirmation.y}px`
+            }}
+          >
+            <p className={styles.confirmText}>Delete {deleteConfirmation.fileName}?</p>
+            <div className={styles.confirmActions}>
+              <button
+                className={styles.confirmButton}
+                onClick={() => handleDeleteConfirm(deleteConfirmation.fileName)}
+              >
+                Delete
+              </button>
+              <button
+                className={styles.cancelButton}
+                onClick={() => setDeleteConfirmation(null)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-      {deleteConfirmation && (
-        <div 
-          className={styles.overlay}
-          onClick={() => setDeleteConfirmation(null)}
-        />
+        </>
       )}
     </div>
   );

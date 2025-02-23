@@ -55,9 +55,8 @@ Icon
 # Project specific
 config/secrets.json
 *.log
-
+backend/output/*
 .env
 .cache/
 **/.cache/
-
 *.txt
