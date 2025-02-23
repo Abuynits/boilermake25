@@ -1,6 +1,6 @@
 {
   search(
-    query: "is:pr is:merged label:\"good first issue\" language:JavaScript -label:documentation comments:>1 commits:1..5"
+    query: "is:pr is:merged label:\"good first issue\" language:{programming_language} -label:documentation comments:>1 commits:1..5"
     type: ISSUE
     first: 20
   ) {
@@ -32,11 +32,7 @@
               text
             }
           }
-          packageJson: object(expression: "HEAD:package.json") {
-            ... on Blob {
-              text
-            }
-          }
+          {build_file_queries}
         }
         labels(first: 10) {
           nodes {
