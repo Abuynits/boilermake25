@@ -60,3 +60,7 @@ backend/output/*
 .cache/
 **/.cache/
 *.txt
+
+# Saad
+saad/out
+saad/secrets.py
