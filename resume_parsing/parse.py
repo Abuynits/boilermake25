@@ -9,17 +9,6 @@ from resume_parsing.json_format import CSResume, CSJobPosting
 from .prompts import resume_prompt_template, posting_prompt_template
 
 ############################# UTIL FUNCTIONS ############################# 
-def load_secrets():
-    secrets_path = os.path.join(os.path.dirname(__file__), '..', 'config', 'secrets.json')
-    try:
-        with open(secrets_path, 'r') as f:
-            secrets = json.load(f)
-            os.environ['OPENAI_API_KEY'] = secrets['OPENAI_API_KEY']
-            return secrets
-    except FileNotFoundError:
-        raise FileNotFoundError(f"secrets.json not found at {secrets_path}. Please create it with your OpenAI API key.")
-    except json.JSONDecodeError:
-        raise ValueError("secrets.json is not a valid JSON file")
 
 def load_input(file_path: str, is_txt: bool=False) -> str:
     if file_path.lower().endswith(".pdf") and not is_txt:

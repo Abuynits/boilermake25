@@ -1,6 +1,7 @@
 import os
 import json
 
+from secrets import load_secrets
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
@@ -32,7 +33,6 @@ if not os.path.exists(in_path):
 
 out_path = resume_dir / output_file
 
-api_key = os.environ.get("OPENAI_API_KEY")
 # breakpoint()
 inp = load_input(in_path)
 llm = ChatOpenAI(temperature=0, model="gpt-4o-mini") 
