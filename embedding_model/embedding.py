@@ -3,6 +3,7 @@ import os
 import socket
 import subprocess
 from pathlib import Path
+import langchain_text_splitters
 
 import modal
 
@@ -11,7 +12,7 @@ MODEL_ID = "jinaai/jina-embeddings-v2-base-code"
 BATCH_SIZE = 32
 DOCKER_IMAGE = (
     # "ghcr.io/huggingface/text-embeddings-inference:86-0.4.0"  # Ampere 86 for A10s.
-    "ghcr.io/huggingface/text-embeddings-inference:0.4.0" # Ampere 80 for A100s.
+    "ghcr.io/huggingface/text-embeddings-inference:0.4.0"  # Ampere 80 for A100s.
     # "ghcr.io/huggingface/text-embeddings-inference:0.3.0"  # Turing for T4s.
 )
 
@@ -37,9 +38,7 @@ def spawn_server() -> subprocess.Popen:
             # If so, a connection can never be made.
             retcode = process.poll()
             if retcode is not None:
-                raise RuntimeError(
-                    f"launcher exited unexpectedly with code {retcode}"
-                )
+                raise RuntimeError(f"launcher exited unexpectedly with code {retcode}")
 
 
 def download_model():
@@ -72,7 +71,7 @@ with tei_image.imports():
     concurrency_limit=20,
     # Allow each container to process up to 10 batches at once.
     allow_concurrent_inputs=10,
-    container_idle_timeout=5*60,
+    container_idle_timeout=5 * 60,
 )
 class TextEmbeddingsInference:
     @modal.enter()
@@ -96,5 +95,14 @@ class TextEmbeddingsInference:
 
 @app.local_entrypoint()
 def main():
-    embed_input = open("embed-input.txt").read()
-    # 
+    supported_langs = {e.value for e in langchain_text_splitters.Language}
+    model_context_len = 8192
+    embed_files = json.load(Path("temp.json").open())
+    file_ids = {}
+
+    for file in embed_files:
+        name, content = file["name"], file["content"]
+        ext = Path(name).suffix[1:]
+        if ext not in supported_langs:
+            print(f"Skipping {name} due to unsupported language {ext}")
+            continue

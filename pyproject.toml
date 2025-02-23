@@ -8,6 +8,7 @@ dependencies = [
     "groq>=0.18.0",
     "instructor>=1.7.2",
     "joblib>=1.4.2",
+    "langchain>=0.3.19",
     "modal>=0.73.66",
     "pydantic>=2.10.6",
     "python-dotenv>=1.0.1",
