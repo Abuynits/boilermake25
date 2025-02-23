@@ -13,9 +13,6 @@ data_name = 'example_res.json'
 
 openai.api_key = api_key
 client = OpenAI()
-#gh_username = "Abuynits"
-#gh_email = "abuynits@gmail.com"
-#resume_file = Path(__file__).parent / 'data' / f'{data_name}'
 
 def prompt_gpt(prompt, sys_prompt):
 
@@ -31,7 +28,7 @@ def prompt_gpt(prompt, sys_prompt):
     content = response.choices[0].message.content
     return content
 
-def extract_gh_files(resume_data, gh_username, gh_email):
+def extract_gh_files(resume_data, gh_username):
 
     experience_lines = []
     for exper in resume_data['experience']:
@@ -183,7 +180,7 @@ def extract_gh_files(resume_data, gh_username, gh_email):
             continue
         url = f"https://github.com/{repo_data['owner']}/{repo_data['title']}.git"
         # resp = repo_url_to_context(url)
-        eval = repo_url_to_commits(url, gh_email)[:300000]
+        eval = repo_url_to_commits(url, gh_username)[:300000]
         prompt += f"**Repo #{i}**:\n"
         prompt += f"**Description**: {proj_data['description']}\n"
         prompt += f"**Git Log**: {eval}\n"

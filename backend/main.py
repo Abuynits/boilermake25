@@ -7,6 +7,7 @@ import tempfile
 from fastapi import FastAPI, File, UploadFile, Form, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from gh_scraper.FINAL import grift_check
 
 class CodeRequest(BaseModel):
     code: str
@@ -95,6 +96,20 @@ async def execute_code_endpoint(request: CodeRequest):
         return result
     except Exception as e:
         return {"error": str(e), "success": False, "output": ""}
+
+@app.post("/api/grift_check")
+async def analyze_resume(
+    resume_path: str = Form(...),
+    resume_data_path: str = Form(...)
+):
+    try:
+        out_path = await grift_check(resume_path, resume_data_path)
+        return {
+            "out_path": out_path
+        }
+    except Exception as e:
+        return {"error": str(e)}, 500
+
 
 if __name__ == "__main__":
     import uvicorn
