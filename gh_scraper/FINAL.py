@@ -19,13 +19,11 @@ from gh_scraper.readme_scraper import scrape_readme
 pdb.disable()
 
 
-github_email="hvbhatt@purdue.edu"
+github_email="sagarreddypatil@gmail.com"
 
-resume_name='harmya_bhatt_resume.pdf'
+resume_name='sagar_resume.pdf'
+
 output_file = resume_name.split('.')[0] + '_annotated.pdf'
-
-tmp_file = resume_name.split('.')[0] + '_tmp.pdf'
-
 
 resume_dir = Path(__file__).parent / 'data'
 if not os.path.exists(resume_dir):
@@ -37,15 +35,6 @@ if not os.path.exists(in_path):
     exit(1)
 breakpoint()
 out_path = resume_dir / output_file
-github_username = 'harmya'
-user_json_path = Path(__file__).parent / 'data' / f'{github_username}.json'
-
-if os.path.exists(user_json_path):
-    with open(user_json_path, 'r') as f:
-        rated_resume = json.load(f)
-    annotate_resume(rated_resume, in_path, out_path)
-    print("using cached stats")
-    exit(0)
 
 # breakpoint()
 inp = load_input(in_path)
@@ -78,6 +67,14 @@ github_username = resume_result['personal']['links']['github']
 if '/' in github_username:
     github_username = github_username.split('/')[-1]
 # github_email = extract_email_from_repo(github_username)
+user_json_path = Path(__file__).parent / 'data' / f'{github_username}.json'
+
+if os.path.exists(user_json_path):
+    with open(user_json_path, 'r') as f:
+        rated_resume = json.load(f)
+    annotate_resume(rated_resume, in_path, out_path)
+    print("using cached stats")
+    exit(0)
 
 files = get_files(github_username)
 scrape_readme(github_username, files)

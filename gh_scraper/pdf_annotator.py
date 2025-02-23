@@ -40,6 +40,8 @@ def highlight_text(pdf_path, output_path, text_color_pairs):
             output_text = get_viable_text(doc, txt)
             added=False
             for text in output_text:
+                if len(text) <= 5:
+                    continue
                 text_instances = page.search_for(text)  # Find all instances of the text
                 for inst in text_instances:
                     highlight = page.add_highlight_annot(inst)  # Add highlight annotation

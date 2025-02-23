@@ -6,7 +6,7 @@ import time
 import numpy as np
 import pdb
 SAVE_FOLLOWER=False
-SAVE_ORG=False
+SAVE_ORG=True
 
 
 

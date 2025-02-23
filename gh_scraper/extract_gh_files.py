@@ -156,7 +156,7 @@ def extract_gh_files(resume_data, gh_username, gh_email):
         1 = High likelihood of plagiarism or embellishment
         5 = Original work
 
-    Do not focus on the quality of the commit messages.
+    Do not focus on the quality of the commit messages. Try to be fair in your analysis. It is okay for some code snippets to be copied from external sources.
     *Red Flags to Watch For*:
     - Large initial commits followed by minimal contributions (suggesting bulk copy-pasting)
     - Code copied from well-known sources (e.g., GitHub repositories, Stack Overflow, or open-source projects)
@@ -164,7 +164,7 @@ def extract_gh_files(resume_data, gh_username, gh_email):
     - Inconsistent coding style (indicating possible multiple authors)
     - Commits with drastic jumps in complexity (suggesting pasted code rather than iterative development)
     - Sudden, short bursts of activity followed by long inactivity (suggesting last-minute additions rather than steady progress)
-    - Missing implementation details for complex claims in the resume
+    - (MOST IMPORTANT) Missing implementation details for complex claims in the resume
 
     *Response Format*:
     Repo #0: 5
