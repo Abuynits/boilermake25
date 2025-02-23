@@ -13,19 +13,43 @@ colors = {
     "Light Green": [.56, .93, .56],
     "Green": [0, 0.5, 0]
 }
+def get_viable_text(doc, text):
+    output_text = []
+    curr_text = text.split(' ')[0]
+    for t in text.split(' ')[1:]:
+        found_match = False
+        for page in doc:
+            if (f'{curr_text} {t}') in page.get_text():
+                found_match = True
+                break
+            else:
+                continue
+        if found_match:
+            curr_text = f'{curr_text} {t}'
+        else:
+            output_text.append(curr_text)
+            curr_text = t
+    output_text.append(curr_text)
+    return output_text
+
+
 def highlight_text(pdf_path, output_path, text_color_pairs):
     doc = fitz.open(pdf_path)
     
     for page in doc:
-        for txt, color in text_color_pairs:
+        for txt, color, reasoning in text_color_pairs:
+
             # remove chars that arent used
             #breakpoint()
-            text_pairs_1 = txt.split(" ")[::3]
-            text_pairs_2 = txt.split(" ")[1::3]
-            text_pairs_3 = txt.split(" ")[2::3]
-            pairs = [" ".join(i) for i in list(zip(text_pairs_1, text_pairs_2, text_pairs_3))]
-            for pair in pairs:
-                text_instances = page.search_for(pair)  # Find all instances of the text
+            # txt is a line - find the start instances of the text
+            output_text = get_viable_text(doc, txt)
+            # text_pairs_1 = txt.split(" ")[::3]
+            # text_pairs_2 = txt.split(" ")[1::3]
+            # text_pairs_3 = txt.split(" ")[2::3]
+            # pairs = [" ".join(i) for i in list(zip(text_pairs_1, text_pairs_2, text_pairs_3))]
+            # for pair in pairs:
+            for text in output_text:
+                text_instances = page.search_for(text)  # Find all instances of the text
                 for inst in text_instances:
                     highlight = page.add_highlight_annot(inst)  # Add highlight annotation
                     highlight.set_colors({"stroke":(color), "fill":color})
@@ -36,20 +60,22 @@ def highlight_text(pdf_path, output_path, text_color_pairs):
 
 def annotate_resume(rated_data, pdf_in, pdf_out):
     text_color_pairs = []
-    for text, rating, _ in rated_data['experience_data']:
+    for text, rating, reasoning in rated_data['experience_data']:
+        reasoning = reasoning.strip().split(":")[1:]
+        reasoning = ":".join(reasoning)
         if rating == 1:
-            text_color_pairs.append((text, colors["Red"]))
+            text_color_pairs.append((text, colors["Red"], reasoning))
         elif rating == 2:
-            text_color_pairs.append((text, colors["Light Red"]))
+            text_color_pairs.append((text, colors["Light Red"], reasoning))
         elif rating == 3:
-            text_color_pairs.append((text, colors["Yellow"]))
+            text_color_pairs.append((text, colors["Yellow"], reasoning))
         elif rating == 4:
-            text_color_pairs.append((text, colors["Light Green"]))
+            text_color_pairs.append((text, colors["Light Green"], reasoning))
         elif rating == 5:
-            text_color_pairs.append((text, colors["Green"]))
+            text_color_pairs.append((text, colors["Green"], reasoning))
     for project in rated_data['project_data']:
         rating = project[3]
-        
+        reasoning = project[4]
         text = project[0]['description']
         if type(text) != list:
             text = text.split('.')
@@ -60,28 +86,28 @@ def annotate_resume(rated_data, pdf_in, pdf_out):
         if rating == 1:
             for t in text:
                 if len(t) > 0:
-                    text_color_pairs.append((t, colors["Red"]))
+                    text_color_pairs.append((t, colors["Red"], reasoning))
         elif rating == 2:
             for t in text:
                 if len(t) > 0:
-                    text_color_pairs.append((t, colors["Light Red"]))
+                    text_color_pairs.append((t, colors["Light Red"], reasoning))
         elif rating == 3:
             for t in text:
                 if len(t) > 0:
-                    text_color_pairs.append((t, colors["Yellow"]))
+                    text_color_pairs.append((t, colors["Yellow"], reasoning))
         elif rating == 4:
             for t in text:
                 if len(t) > 0:
-                    text_color_pairs.append((t, colors["Light Green"]))
+                    text_color_pairs.append((t, colors["Light Green"], reasoning))
         elif rating == 5:
             for t in text:
                 if len(t) > 0:
-                    text_color_pairs.append((t, colors["Green"]))
+                    text_color_pairs.append((t, colors["Green"], reasoning))
         else:
             for t in text:
                 if len(t) > 0:
-                    text_color_pairs.append((t, colors["Yellow"]))
+                    text_color_pairs.append((t, colors["Yellow"], reasoning))
 
     # Example usage
-    # breakpoint()
+    breakpoint()
     highlight_text(pdf_in, pdf_out, text_color_pairs)

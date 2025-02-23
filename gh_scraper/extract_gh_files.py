@@ -7,7 +7,7 @@ from openai import OpenAI
 import openai
 import time
 from urllib.request import urlopen
-from repo_llm_context import repo_url_to_context, repo_url_to_commits
+from repo_llm_context import repo_url_to_commits
 from secrets import OPENAI_API_KEY as api_key
 data_name = 'example_res.json'
 
